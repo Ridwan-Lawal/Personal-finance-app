@@ -1,24 +1,95 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-beige-100: #f8f4f0;
+  --color-beige-500: #98908b;
+  --color-grey-900: #201f24;
+  --color-grey-500: #696868;
+  --color-grey-300: #b3b3b3;
+  --color-grey-100: #f2f2f2;
+  --color-green: #277c78;
+  --color-yellow: #f2cdac;
+  --color-cyan: #82c9d7;
+  --color-navy: #626070;
+  --color-red: #c94736;
+  --color-purple: #826cb0;
+  --color-purple-2: #af81ba;
+  --color-turquoise: #597c7c;
+  --color-brown: #93674f;
+  --color-magenta: #934f6f;
+  --color-blue: #3f82b2;
+  --color-navy-grey: #97a0ac;
+  --color-army-green: #7f9161;
+  --color-gold: #cab361;
+  --color-orange: #be6c49;
+  --color-white: #ffffff;
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer base {
+  body {
+    @apply bg-grey-100;
+  }
+  .text-preset-1 {
+    @apply text-[32px] font-bold leading-[120%] tracking-[0px] text-grey-900;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  .text-preset-2 {
+    @apply text-[20px] font-bold leading-[120%] tracking-[0px];
+  }
+
+  .text-preset-3 {
+    @apply font-bold leading-[150%] tracking-[0px];
+  }
+
+  .text-preset-4 {
+    @apply text-sm leading-[150%] tracking-[0px] text-grey-900;
+  }
+
+  .text-preset-4-bold,
+  label {
+    @apply font-bold text-sm leading-[150%] tracking-[0px] text-grey-500;
+  }
+
+  .text-preset-5,
+  input {
+    @apply text-xs leading-[150%] tracking-[0px] text-grey-900;
+  }
+
+  .text-preset-6 {
+    @apply font-bold  text-xs leading-[150%] tracking-[0px] text-grey-900;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* forms */
+
+  .field {
+    @apply flex flex-col gap-1;
+  }
+
+  label {
+    @apply text-grey-500;
+  }
+
+  .field-container {
+    @apply border   border-beige-500 px-5 py-3 rounded-[8px] flex items-center gap-4 justify-between;
+  }
+
+  .basic-input {
+    @apply focus:outline-none 
+    text-sm leading-[150%] tracking-[0px] text-grey-900  placeholder:text-beige-500  flex-grow;
+  }
+
+  .error-msg {
+    @apply text-grey-500  text-right;
+  }
+
+  /* ----- Buttons ----- */
+  .btn-auth {
+    @apply rounded-[8px] bg-grey-900 p-4 flex items-center justify-center gap-4 text-white;
+  }
 }
+@layer utilities {
+}
+
+/* start building the authentication part */
