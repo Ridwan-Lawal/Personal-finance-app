@@ -1,62 +1,114 @@
 "use client";
+import { signupAction } from "@/app/_lib/actions";
 import BasicFormField from "@/app/_ui/BasicFormField";
 import showIcon from "@/public/icon-show-password.svg";
+import hideIcon from "@/public/icon-hide-password.svg";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { useShowPassword } from "@/app/_hooks/useShowPassword";
 
 export default function SignupForm() {
+  const [state, formAction, isSigningUp] = useActionState(signupAction, null);
+  const router = useRouter();
+  const { showPassword, onShowPassword } = useShowPassword();
+
+  const { errors, inputs } = state ?? {};
+
+  useEffect(() => {
+    if (state?.success === null || state?.success === undefined) return;
+    if (state?.success) {
+      toast.success(state?.message);
+      router.push("/");
+    }
+    if (state?.success === false) {
+      toast.error(state?.message);
+    }
+  }, [state, router]);
+
   return (
     <div className="bg-white  flex flex-col gap-[32px] rounded-[12px] px-5 py-6 max-w-[560px] mx-auto">
       <h1 className="text-preset-1">Sign Up</h1>
 
-      <form action="" className="flex flex-col gap-4">
+      <form
+        action={formAction}
+        className="flex flex-col gap-4"
+        autoComplete="on"
+      >
         {/* name */}
-        <BasicFormField htmlFor="name" label="Name" error="">
+        <BasicFormField htmlFor="name" label="Name" error={errors?.name?.at(0)}>
           <input
             type="text"
             name="name"
             id="name"
             autoComplete="name"
-            defaultValue=""
+            defaultValue={(inputs?.name as string) ?? ""}
             className="basic-input"
             placeholder="Enter your name"
+            disabled={isSigningUp}
+            aria-disabled={isSigningUp}
+            aria-invalid={errors?.name?.at(0) ? true : false}
           />
         </BasicFormField>
 
         {/* email */}
-        <BasicFormField htmlFor="email" label="Email" error="">
+        <BasicFormField
+          htmlFor="email"
+          label="Email"
+          error={errors?.email?.at(0)}
+        >
           <input
             type="text"
             name="email"
             id="email"
             autoComplete="email"
-            defaultValue=""
+            defaultValue={inputs?.email as string}
             className="basic-input"
             placeholder="Enter your email address"
+            disabled={isSigningUp}
+            aria-disabled={isSigningUp}
+            aria-invalid={errors?.email?.at(0) ? true : false}
           />
         </BasicFormField>
 
         {/* password */}
-        <BasicFormField htmlFor="password" label="Create Password" error="">
+        <BasicFormField
+          htmlFor="password"
+          label="Create Password"
+          error={errors?.password?.at(0)}
+        >
           <input
-            type="text"
+            type={showPassword ? "text" : "password"}
             name="password"
             id="password"
             autoComplete="password"
-            defaultValue=""
+            defaultValue={(inputs?.password as string) ?? ""}
             placeholder="Create a password"
             className="basic-input"
+            disabled={isSigningUp}
+            aria-disabled={isSigningUp}
+            aria-invalid={errors?.password?.at(0) ? true : false}
           />
 
-          <Image
-            src={showIcon}
-            alt="show password"
-            quality={100}
-            priority={true}
-          />
+          <div onClick={onShowPassword} className="cursor-pointer">
+            <Image
+              src={showPassword ? hideIcon : showIcon}
+              alt="show password"
+              quality={100}
+              priority={true}
+            />
+          </div>
         </BasicFormField>
 
-        <button className="btn-auth mt-[32px]">Creeat Account</button>
+        <button
+          className="btn-auth mt-[32px] cursor-pointer"
+          style={{ opacity: isSigningUp ? 0.5 : 1 }}
+          disabled={isSigningUp}
+        >
+          {isSigningUp ? "Creating account..." : "Create Account"}
+        </button>
       </form>
 
       <p className="text-preset-4 text-grey-500 text-center">
