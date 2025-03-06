@@ -17,7 +17,7 @@ export default function BasicFormField({
     <div className="fleid">
       <label htmlFor={htmlFor}>{label}</label>
       <div className="field-container">{children}</div>
-      {error && <p className="error-msg small">{error}</p>}
+      {error && <p className="error-msg  text-preset-5">{error}</p>}
     </div>
   );
 }
