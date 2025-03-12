@@ -4,11 +4,11 @@ import "@/app/_styles/globals.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <div>
+    <div className="flex flex-col min-h-screen w-full lg:flex-row-reverse max-w-[1440px] mx-auto">
+      <div className="flex-grow border-2 border-red ">{children}</div>
+      <div className="lg:min-h-screen lg:w-[25%]">
         <DashboardNavbar />
       </div>
-      <div>{children}</div>
     </div>
   );
 }

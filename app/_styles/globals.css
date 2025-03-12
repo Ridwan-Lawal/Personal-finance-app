@@ -38,7 +38,7 @@
   }
 
   .text-preset-3 {
-    @apply font-bold leading-[150%] tracking-[0px];
+    @apply text-base  font-bold leading-[150%] tracking-[0px];
   }
 
   .text-preset-4 {
@@ -53,6 +53,10 @@
   .text-preset-5,
   input {
     @apply text-xs leading-[150%] tracking-[0px] text-grey-900;
+  }
+
+  .text-preset-5-bold {
+    @apply font-bold text-xs leading-[150%] tracking-[0px] text-grey-900;
   }
 
   .text-preset-6 {
