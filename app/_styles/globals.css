@@ -92,6 +92,14 @@
   .btn-auth {
     @apply rounded-[8px] bg-grey-900 p-4 flex items-center justify-center gap-4 text-white;
   }
+
+  /* dashboard navbar */
+  .dashboard-nav {
+    @apply border border-black bg-grey-900 lg:h-full lg:w-full  lg:flex lg:flex-col gap-6 lg:pb-6 lg:rounded-r-[10px] lg:rounded-t-none rounded-t-[8px];
+  }
+  .nav-links {
+    @apply flex flex-row justify-between items-center lg:flex-col px-4 md:px-10 pt-2 lg:px-0 lg:items-start border lg:pr-6 lg:gap-1 lg:justify-start lg:flex-grow;
+  }
 }
 @layer utilities {
 }
