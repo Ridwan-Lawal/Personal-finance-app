@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen w-full lg:flex-row-reverse max-w-[1440px] mx-auto">
       <div className="flex-grow border-2 border-red ">{children}</div>
-      <div className="lg:min-h-screen lg:w-[25%]">
+      <div className="lg:min-h-screen ">
         <DashboardNavbar />
       </div>
     </div>
