@@ -25,46 +25,65 @@
   --color-white: #ffffff;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 @layer base {
   body {
-    @apply bg-grey-100;
+    @apply bg-grey-100 m-0 p-0;
   }
   .text-preset-1 {
-    @apply text-[32px] font-bold leading-[120%] tracking-[0px] text-grey-900;
+    @apply text-grey-900 text-[32px] leading-[120%] font-bold tracking-[0px];
   }
 
   .text-preset-2 {
-    @apply text-[20px] font-bold leading-[120%] tracking-[0px];
+    @apply text-[20px] leading-[120%] font-bold tracking-[0px];
   }
 
   .text-preset-3 {
-    @apply text-base  font-bold leading-[150%] tracking-[0px];
+    @apply text-base leading-[150%] font-bold tracking-[0px];
   }
 
   .text-preset-4 {
-    @apply text-sm leading-[150%] tracking-[0px] text-grey-900;
+    @apply text-grey-900 text-sm leading-[150%] tracking-[0px];
   }
 
   .text-preset-4-bold,
   label {
-    @apply font-bold text-sm leading-[150%] tracking-[0px] text-grey-500;
+    @apply text-grey-500 text-sm leading-[150%] font-bold tracking-[0px];
   }
 
   .text-preset-5,
   input {
-    @apply text-xs leading-[150%] tracking-[0px] text-grey-900;
+    @apply text-grey-900 text-xs leading-[150%] tracking-[0px];
   }
 
   .text-preset-5-bold {
-    @apply font-bold text-xs leading-[150%] tracking-[0px] text-grey-900;
+    @apply text-grey-900 text-xs leading-[150%] font-bold tracking-[0px];
   }
 
   .text-preset-6 {
-    @apply font-bold  text-xs leading-[150%] tracking-[0px] text-grey-900;
+    @apply text-grey-900 text-xs leading-[150%] font-bold tracking-[0px];
   }
 }
 
 @layer components {
+  /* buttons */
+  .btn {
+    @apply border-beige-500 flex cursor-pointer items-center gap-4 rounded-lg border px-4 py-3;
+  }
+
+  .btn-pagination {
+    @apply hover:bg-grey-900 transition-colors hover:text-white;
+  }
+
+  .btn-page-active {
+    @apply bg-grey-900 border-none text-white;
+  }
+
   /* forms */
 
   .field {
@@ -76,29 +95,42 @@
   }
 
   .field-container {
-    @apply border   border-beige-500 px-5 py-3 rounded-[8px] flex items-center gap-4 justify-between;
+    @apply border-beige-500 flex items-center justify-between gap-4 rounded-[8px] border px-5 py-3;
   }
 
   .basic-input {
-    @apply focus:outline-none 
-    text-sm leading-[150%] tracking-[0px] text-grey-900  placeholder:text-beige-500  flex-grow;
+    @apply text-grey-900 placeholder:text-beige-500 flex-grow text-sm leading-[150%] tracking-[0px] focus:outline-none;
   }
 
   .error-msg {
-    @apply text-grey-500  text-right;
+    @apply text-grey-500 text-right;
   }
 
   /* ----- Buttons ----- */
   .btn-auth {
-    @apply rounded-[8px] bg-grey-900 p-4 flex items-center justify-center gap-4 text-white;
+    @apply bg-grey-900 flex items-center justify-center gap-4 rounded-[8px] p-4 text-white;
   }
 
   /* dashboard navbar */
   .dashboard-nav {
-    @apply border border-black bg-grey-900 lg:h-full lg:w-full  lg:flex lg:flex-col gap-6 lg:pb-6 lg:rounded-r-[10px] lg:rounded-t-none rounded-t-[8px];
+    @apply bg-grey-900 gap-6 rounded-t-[8px] border border-black lg:flex lg:h-full lg:w-full lg:flex-col lg:rounded-t-none lg:rounded-r-[10px] lg:pb-6;
   }
   .nav-links {
-    @apply flex flex-row justify-between items-center lg:flex-col px-4 md:px-10 pt-2 lg:px-0 lg:items-start border lg:pr-6 lg:gap-1 lg:justify-start lg:flex-grow;
+    @apply flex flex-row items-center justify-between border px-4 pt-2 md:px-10 lg:flex-grow lg:flex-col lg:items-start lg:justify-start lg:gap-1 lg:px-0 lg:pr-6;
+  }
+
+  /* Transaction page */
+  /* select bar */
+  .select-bar {
+    @apply hidden items-center gap-2 border md:flex;
+  }
+
+  .select-bar div {
+    @apply border-beige-500 flex items-center gap-4 rounded-lg border px-5 py-3;
+  }
+
+  .dropdown {
+    @apply absolute w-full space-y-3 rounded-lg border bg-white px-5 py-3 shadow-md;
   }
 }
 @layer utilities {

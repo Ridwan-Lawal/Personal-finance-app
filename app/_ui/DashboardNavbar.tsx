@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import {
   BudgetsIcon,
@@ -13,8 +13,9 @@ import {
 import NavIcon from "@/app/_ui/NavIcon";
 import logo from "@/public/logo-large.svg";
 import Image from "next/image";
-import minimizeIcon from "@/public/icon-minimize-menu.svg";
+
 import logoSmall from "@/public/logo-small.svg";
+import { useMinimizeMenu } from "@/app/_hooks/useMinimizeMenu";
 
 const navLinks = [
   { navIcon: OverviewIcon, navText: "overview", route: "/" },
@@ -29,29 +30,7 @@ const navLinks = [
 ];
 
 export default function DashboardNavbar() {
-  const [isMinimizeMenu, setIsMinimizeMenu] = useState(true);
-
-  const onMinimiseMenu = () => setIsMinimizeMenu((cur) => !cur);
-
-  // getting minimize option in storage
-  useEffect(() => {
-    const isMinimizeOptionInStorage = localStorage.getItem(
-      "finance-menu-minimze"
-    );
-
-    if (isMinimizeOptionInStorage) {
-      const minimizeMenuOption: boolean = JSON.parse(isMinimizeOptionInStorage);
-      setIsMinimizeMenu(minimizeMenuOption);
-    }
-  }, []);
-
-  // storing minimize option in storage
-  useEffect(() => {
-    localStorage.setItem(
-      "finance-menu-minimze",
-      JSON.stringify(isMinimizeMenu)
-    );
-  }, [isMinimizeMenu]);
+  const { isMinimizeMenu, onMinimiseMenu } = useMinimizeMenu();
 
   return (
     <nav
