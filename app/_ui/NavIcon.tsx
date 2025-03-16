@@ -23,7 +23,7 @@ export default function NavIcon({
   isMinimizeMenu,
 }: NavIconProp) {
   const pathname = usePathname();
-  const isLinkActive = pathname.includes(href);
+  const isLinkActive = pathname === href;
   const router = useRouter();
 
   return (
