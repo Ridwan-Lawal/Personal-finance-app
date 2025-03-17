@@ -1,8 +1,10 @@
 "use client";
 
+import { useSelectOptions } from "@/app/_hooks/useSelectOptions";
 import chevronDownIcon from "@/public/icon-caret-down.svg";
 import clsx from "clsx";
 import Image, { StaticImageData } from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 interface selectBarProps<T extends StaticImageData> {
@@ -16,7 +18,7 @@ interface selectBarProps<T extends StaticImageData> {
   onBlurDropdown: () => void;
 }
 
-export default function SelectBar<T extends StaticImageData>({
+export default function CategorySelectBar<T extends StaticImageData>({
   select,
   isDropdownOpen,
   onOpenDropdown,
@@ -24,11 +26,21 @@ export default function SelectBar<T extends StaticImageData>({
 }: selectBarProps<T>) {
   const { icon, label, options } = select ?? {};
 
+  const searchParams = useSearchParams();
+  const categoryOption = searchParams.get("category") || "all transactions";
+
+  // Adding option to the url
+  const { onSelectOption, optimisticOption } = useSelectOptions(
+    categoryOption,
+    searchParams,
+    label.toLowerCase(),
+  );
+
   useEffect(() => {
-    function handleOnUnfocusOptions(e: Event) {
+    function handleOnUnfocusOptions(e: MouseEvent) {
+      const el = e.target as HTMLElement;
       if (e.target) {
-        if (!e.target.closest(".dropdown-block")) {
-          console.log("yes");
+        if (!el.closest(".dropdown-block")) {
           onBlurDropdown();
         }
       }
@@ -56,7 +68,9 @@ export default function SelectBar<T extends StaticImageData>({
         <p className="text-preset-4 text-grey-500">{label}</p>
 
         <div className="cursor-pointer" onClick={onOpenDropdown}>
-          <p className="text-preset-4 text-grey-900">Latest</p>
+          <p className="text-preset-4 text-grey-900 capitalize">
+            {optimisticOption?.optionSelected}
+          </p>
           <Image
             src={chevronDownIcon}
             alt="chevron-down"
@@ -74,13 +88,19 @@ export default function SelectBar<T extends StaticImageData>({
       {isDropdownOpen && (
         <div className="relative">
           <ul className="dropdown right-0 w-fit bg-white md:w-full">
-            {options.map((sortType) => (
+            {options.map((option) => (
               // font-bold for active selection
               <li
-                key={sortType}
-                className="text-preset-4 text-grey-900 cursor-pointer capitalize transition-all hover:font-bold"
+                key={option}
+                className={clsx(
+                  {
+                    "font-bold": option === optimisticOption?.optionSelected,
+                  },
+                  "text-preset-4 text-grey-900 cursor-pointer capitalize transition-all hover:font-bold",
+                )}
+                onClick={() => onSelectOption(option)}
               >
-                {sortType}
+                {option}
               </li>
             ))}
           </ul>

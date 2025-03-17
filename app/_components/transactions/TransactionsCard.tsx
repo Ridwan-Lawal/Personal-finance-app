@@ -1,7 +1,16 @@
-import avatar from "@/public/avatars/aqua-flow-utilities.jpg";
+import { formatDate } from "@/app/_lib/helper";
+import { Tables } from "@/app/_lib/supabase/dbSchema";
 import Image from "next/image";
 
-export default function TransactionsCard() {
+export default async function TransactionsCard({
+  transaction,
+}: {
+  transaction: Tables<"transactions">;
+}) {
+  const { avatar, name, category, created_at, amount } = transaction ?? {};
+
+  //   const blurDataUrl = await getBase64Image(avatar);
+
   return (
     <div className="border-grey-100 flex items-center justify-between gap-8 border-t pt-4 md:grid md:grid-cols-5">
       {/* avatar and name and category(mobile) */}
@@ -9,39 +18,56 @@ export default function TransactionsCard() {
         {/* avatar */}
         <div className="relative size-8 overflow-hidden rounded-full md:size-10">
           <Image
-            src={avatar}
+            src="/avatars/emma-richardson.jpg"
             alt="avatar"
             quality={100}
-            placeholder="blur"
             priority={true}
             fill
             className="object-cover"
           />
+
+          {/* <Image
+            src={avatar ?? ""}
+            alt="avatar"
+            quality={100}
+            placeholder={blurDataUrl ? "blur" : "empty"}
+            blurDataURL={blurDataUrl}
+            priority={true}
+            fill
+            className="object-cover"
+          /> */}
         </div>
 
         {/* name and category mobile */}
         <div className="gap flex flex-col gap-1 md:justify-self-center">
-          <p className="text-preset-4-bold text-grey-900 capitalize">
-            Bravo Zen Spa
-          </p>
+          <p className="text-preset-4-bold text-grey-900 capitalize">{name}</p>
           <p className="text-preset-5 text-grey-500 capitalize md:hidden">
-            Personal care
+            {category ?? "N/A"}
           </p>
         </div>
       </div>
 
-      <p className="text-preset-5 text-grey-500 capitalize md:justify-self-start">
-        Personal care
+      <p className="text-preset-5 text-grey-500 hidden capitalize md:block md:justify-self-start">
+        {category ?? "N/A"}
       </p>
 
-      <p className="text-grey-500 text-preset-5 md:justify-self-start">
-        20 Aug 2024
+      <p className="text-grey-500 text-preset-5 hidden md:block md:justify-self-start">
+        {formatDate(created_at ?? "N/A")}
       </p>
 
       {/* price and date (mobile) */}
       <div className="flex flex-col gap-1 md:justify-self-end">
-        <p className="text-preset-4-bold text-grey-900">$25.00</p>
-        <p className="text-grey-500 text-preset-5 md:hidden">20 Aug 2024</p>
+        <p className="text-preset-4-bold text-grey-900">
+          {amount && amount > 0 ? (
+            <span className="text-green">+${amount.toFixed(2)}</span>
+          ) : (
+            <span>-${amount && Math.abs(amount).toFixed(2)}</span>
+          )}
+        </p>
+        <p className="text-grey-500 text-preset-5 md:hidden">
+          {" "}
+          {formatDate(created_at ?? "N/A")}
+        </p>
       </div>
     </div>
   );
