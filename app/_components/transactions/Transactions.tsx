@@ -7,6 +7,7 @@ export default async function Transactions({ query }: { query: SearchParams }) {
     category: query?.category,
     search: query?.search,
     sortBy: query?.["sort by"],
+    page: (query?.page as string | undefined) ?? "1",
   });
 
   if (!transactions?.length) {
@@ -18,7 +19,7 @@ export default async function Transactions({ query }: { query: SearchParams }) {
   }
 
   return (
-    <div className="p space-y-4">
+    <div className="space-y-4">
       {transactions?.map((transaction) => (
         <TransactionsCard key={transaction?.id} transaction={transaction} />
       ))}
