@@ -20,3 +20,5 @@ export const filter = {
     "personal care",
   ],
 };
+
+export const TRANSACTION_PER_PAGE = 10;

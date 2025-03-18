@@ -1,8 +1,8 @@
 import TransactionFilterSort from "@/app/_components/transactions/TransactionFilterSort";
+import TransactionFooter from "@/app/_components/transactions/TransactionFooter";
 import TransactionHeader from "@/app/_components/transactions/TransactionHeader";
 import Transactions from "@/app/_components/transactions/Transactions";
 import TransactionSearch from "@/app/_components/transactions/TransactionSearch";
-import TransactionsPagination from "@/app/_components/transactions/TransactionsPagination";
 import { Metadata } from "@/app/_lib/metadata";
 import { SearchParams } from "next/dist/server/request/search-params";
 import { Suspense } from "react";
@@ -19,7 +19,7 @@ export default async function Page({
   const query = await searchParams;
   console.log(query);
 
-  const suspenseKey = `${query?.["sort by"]}-${query?.category}-${query?.search}`;
+  const suspenseKey = `${query?.["sort by"]}-${query?.category}-${query?.search}-${query?.page}`;
 
   return (
     <div className="space-y-8 px-4 py-6 md:px-10 md:py-8">
@@ -35,7 +35,9 @@ export default async function Page({
         <Suspense fallback={<div>Loading...</div>} key={suspenseKey}>
           <Transactions query={query} />
         </Suspense>
-        <TransactionsPagination />
+        <Suspense fallback={<div>Loading...</div>}>
+          <TransactionFooter />
+        </Suspense>
       </div>
     </div>
   );
