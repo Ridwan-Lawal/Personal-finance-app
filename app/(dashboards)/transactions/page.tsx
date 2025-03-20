@@ -4,23 +4,29 @@ import TransactionHeader from "@/app/_components/transactions/TransactionHeader"
 import Transactions from "@/app/_components/transactions/Transactions";
 import TransactionSearch from "@/app/_components/transactions/TransactionSearch";
 import { Metadata } from "@/app/_lib/metadata";
-import { SearchParams } from "next/dist/server/request/search-params";
+
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Transactions",
 };
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+interface SearchParams {
+  searchParams: Promise<{
+    page?: string;
+    category?: string;
+    sortby?: string;
+    search?: string;
+  }>;
+}
+
+export default async function Page({ searchParams }: SearchParams) {
   const query = await searchParams;
   console.log(query);
 
-  const suspenseKey = `${query?.["sort by"]}-${query?.category}-${query?.search}-${query?.page}`;
+  const suspenseKey = `${query?.sortby}-${query?.category}-${query?.search}-${query?.page}`;
 
+  console.log(suspenseKey);
   return (
     <div className="space-y-8 px-4 py-6 md:px-10 md:py-8">
       <h1 className="text-preset-1 text-grey-900">Transactions</h1>
@@ -36,7 +42,7 @@ export default async function Page({
           <Transactions query={query} />
         </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
-          <TransactionFooter />
+          <TransactionFooter query={query} />
         </Suspense>
       </div>
     </div>

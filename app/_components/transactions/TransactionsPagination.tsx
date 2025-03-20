@@ -29,7 +29,6 @@ export default function TransactionsPagination({
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    if (pageNo === 1) params.delete("page");
 
     params.set("page", String(pageNo));
 
@@ -40,7 +39,7 @@ export default function TransactionsPagination({
     <div className="mt-11 flex items-center justify-between gap-4">
       <button
         onClick={onPrevPage}
-        className="btn text-preset-4 btn-pagination disabled:text-grey-300 disabled:border-grey-300"
+        className="btn text-preset-4 btn-pagination disabled:text-grey-300 disabled:border-grey-300 disabled:hover:text-grey-300 disabled:hover:bg-none"
         disabled={pageNo === 1}
       >
         <Image src={chevronLeftIcon} alt="arrow" priority={true} />
@@ -49,17 +48,18 @@ export default function TransactionsPagination({
       </button>
 
       <div className="flex flex-wrap items-center gap-2">
-        {Array.from({ length: totalPageNumbers }, (_, i) => i + 1).map(
-          (page) => (
-            <button
-              className={`btn text-preset-4 btn-pagination hidden size-10 items-center justify-center sm:flex ${pageNo === page && "btn-page-active"} `}
-              key={page}
-              onClick={() => onClickPageNo(page)}
-            >
-              {page}
-            </button>
-          ),
-        )}
+        {Array.from(
+          { length: totalPageNumbers > 5 ? 5 : totalPageNumbers },
+          (_, i) => i + 1,
+        ).map((page) => (
+          <button
+            className={`btn text-preset-4 btn-pagination hidden size-10 items-center justify-center sm:flex ${pageNo === page && "btn-page-active"} `}
+            key={page}
+            onClick={() => onClickPageNo(page)}
+          >
+            {page}
+          </button>
+        ))}
 
         <button className="btn text-preset-4 btn-pagination btn-page-active size-10 justify-center sm:hidden">
           {pageNo}
@@ -67,7 +67,7 @@ export default function TransactionsPagination({
       </div>
 
       <button
-        className="btn text-preset-4 btn-pagination disabled:text-grey-300 disabled:border-grey-300"
+        className="btn text-preset-4 btn-pagination disabled:text-grey-300 disabled:border-grey-300 disabled:hover:text-grey-300 disabled:hover:bg-none"
         onClick={onNextPage}
         disabled={pageNo === totalPageNumbers}
       >
@@ -83,4 +83,5 @@ export default function TransactionsPagination({
   );
 }
 
-// start working on the pagination
+// Create a new branch and work on a new feature
+// there's a bug concerning fetching data, create a new branch

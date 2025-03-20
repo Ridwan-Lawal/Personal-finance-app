@@ -18,6 +18,7 @@ export const filter = {
     "dining out",
     "transportation",
     "personal care",
+    "lifestyle",
   ],
 };
 

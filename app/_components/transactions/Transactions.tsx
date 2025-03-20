@@ -1,14 +1,11 @@
 import TransactionsCard from "@/app/_components/transactions/TransactionsCard";
 import { getTransactions } from "@/app/_lib/data-service";
-import { SearchParams } from "next/dist/server/request/search-params";
+import { Query } from "@/app/_lib/types";
 
-export default async function Transactions({ query }: { query: SearchParams }) {
-  const transactions = await getTransactions({
-    category: query?.category,
-    search: query?.search,
-    sortBy: query?.["sort by"],
-    page: (query?.page as string | undefined) ?? "1",
-  });
+export default async function Transactions({ query }: Query) {
+  const { transactions } = await getTransactions(query);
+
+  console.log(transactions);
 
   if (!transactions?.length) {
     return (

@@ -1,8 +1,11 @@
 import TransactionsPagination from "@/app/_components/transactions/TransactionsPagination";
-import { getTotalTranactionsFromDB } from "@/app/_lib/data-service";
+import { getTransactions } from "@/app/_lib/data-service";
+import { Query } from "@/app/_lib/types";
 
-export default async function TransactionFooter() {
-  const totalTransactions = await getTotalTranactionsFromDB();
+export default async function TransactionFooter({ query }: Query) {
+  const { totalTransactions } = await getTransactions(query);
+
+  console.log(totalTransactions);
 
   return <TransactionsPagination totalTransactionsFromDB={totalTransactions} />;
 }
