@@ -16,9 +16,14 @@ export default function TransactionSearch() {
   );
 
   function onSearchTransaction(prompt: string) {
+    console.log(prompt, "prommtttttttttttttttttttttttttttttt");
     const params = new URLSearchParams(searchParams.toString());
-    if (!prompt) params.delete("search");
-    params.set("search", prompt);
+    console.log(prompt, "prommtttt");
+    if (!prompt) {
+      params.delete("search");
+    } else {
+      params.set("search", prompt);
+    }
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }

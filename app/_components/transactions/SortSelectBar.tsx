@@ -27,13 +27,13 @@ export default function SortSelectBar<T extends StaticImageData>({
   const { icon, label, options } = select ?? {};
 
   const searchParams = useSearchParams();
-  const sortByOption = searchParams.get("sort by") || "latest";
+  const sortByOption = searchParams.get("sortby") || "latest";
 
   //Adding options to the url
   const { onSelectOption, optimisticOption } = useSelectOptions(
     sortByOption,
     searchParams,
-    "sort by",
+    "sortby",
   );
 
   // Effect for handling clicks outside the dropdown
