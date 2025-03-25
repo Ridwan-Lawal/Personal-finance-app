@@ -38,10 +38,13 @@ export default function NavIcon({
       </div>
 
       <p
-        className={`text-preset-5-bold group-hover:text-grey-100 hidden capitalize transition-colors sm:block lg:text-base ${isLinkActive ? "text-grey-900" : "text-grey-300"} ${isMinimizeMenu ? "lg:w-0" : "lg:w-full"}transition-all border duration-1000`}
+        className={`text-preset-5-bold hidden capitalize transition-colors sm:block lg:text-base ${isLinkActive ? "text-grey-900 group-hover:text-green" : "text-grey-300 group-hover:text-grey-100"} ${isMinimizeMenu ? "lg:w-0" : "lg:w-full"}transition-all border duration-1000`}
       >
         {text}
       </p>
     </div>
   );
 }
+
+// Create a new branch, and start working on the new feature
+// Learn about caching and document it

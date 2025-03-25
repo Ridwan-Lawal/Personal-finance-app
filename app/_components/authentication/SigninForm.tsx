@@ -1,6 +1,6 @@
 "use client";
 import { useShowPassword } from "@/app/_hooks/useShowPassword";
-import { signinAction } from "@/app/_lib/actions";
+import { signinAction } from "@/app/_lib/actions/authActions";
 import BasicFormField from "@/app/_ui/BasicFormField";
 import showIcon from "@/public/icon-show-password.svg";
 import Image from "next/image";
@@ -27,7 +27,7 @@ export default function SigninForm() {
   }, [state, router]);
 
   return (
-    <div className="bg-white  flex flex-col gap-[32px] rounded-[12px] px-5 py-6 max-w-[560px] mx-auto">
+    <div className="mx-auto flex max-w-[560px] flex-col gap-[32px] rounded-[12px] bg-white px-5 py-6">
       <h1 className="text-preset-1">Sign In</h1>
 
       <form
@@ -98,7 +98,7 @@ export default function SigninForm() {
       <p className="text-preset-4 text-grey-500 text-center">
         Need to create an account?{" "}
         <Link href="/user/signup">
-          <span className="text-preset-4-bold underline text-grey-900">
+          <span className="text-preset-4-bold text-grey-900 underline">
             Sign Up
           </span>
         </Link>

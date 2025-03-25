@@ -1,14 +1,14 @@
 "use client";
-import { signupAction } from "@/app/_lib/actions";
+import { useShowPassword } from "@/app/_hooks/useShowPassword";
+import { signupAction } from "@/app/_lib/actions/authActions";
 import BasicFormField from "@/app/_ui/BasicFormField";
-import showIcon from "@/public/icon-show-password.svg";
 import hideIcon from "@/public/icon-hide-password.svg";
+import showIcon from "@/public/icon-show-password.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useShowPassword } from "@/app/_hooks/useShowPassword";
 
 export default function SignupForm() {
   const [state, formAction, isSigningUp] = useActionState(signupAction, null);
@@ -29,7 +29,7 @@ export default function SignupForm() {
   }, [state, router]);
 
   return (
-    <div className="bg-white  flex flex-col gap-[32px] rounded-[12px] px-5 py-6 max-w-[560px] mx-auto">
+    <div className="mx-auto flex max-w-[560px] flex-col gap-[32px] rounded-[12px] bg-white px-5 py-6">
       <h1 className="text-preset-1">Sign Up</h1>
 
       <form
@@ -114,7 +114,7 @@ export default function SignupForm() {
       <p className="text-preset-4 text-grey-500 text-center">
         Already have an account?{" "}
         <Link href="/user/signin">
-          <span className="text-preset-4-bold underline text-grey-900">
+          <span className="text-preset-4-bold text-grey-900 underline">
             Sign in
           </span>
         </Link>
