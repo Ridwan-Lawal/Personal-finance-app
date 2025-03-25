@@ -22,4 +22,15 @@ export const filter = {
   ],
 };
 
+export const CATEGORIES = [
+  "entertainment",
+  "bills",
+  "groceries",
+  "dining out",
+  "transportation",
+  "personal care",
+  "lifestyle",
+  "education",
+];
+
 export const TRANSACTION_PER_PAGE = 10;
