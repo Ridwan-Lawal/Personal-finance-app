@@ -1,4 +1,5 @@
 import { Metadata } from "@/app/_lib/metadata";
+import Providers from "@/app/_lib/react-query/QueryClientProvider";
 import StoreProvider from "@/app/_lib/redux/StoreProvider";
 import { publicSans } from "@/app/_styles/font";
 import "@/app/_styles/globals.css";
@@ -25,24 +26,26 @@ export default function RootLayout({
         <body
           className={`${publicSans?.className} flex border-2 border-red-900 antialiased`}
         >
-          {children}
+          <Providers>
+            {children}
 
-          <Toaster
-            toastOptions={{
-              success: {
-                iconTheme: {
-                  primary: "#277c78",
-                  secondary: "white",
+            <Toaster
+              toastOptions={{
+                success: {
+                  iconTheme: {
+                    primary: "#277c78",
+                    secondary: "white",
+                  },
                 },
-              },
-              error: {
-                iconTheme: {
-                  primary: "#c94736",
-                  secondary: "white",
+                error: {
+                  iconTheme: {
+                    primary: "#c94736",
+                    secondary: "white",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </Providers>
         </body>
       </StoreProvider>
     </html>

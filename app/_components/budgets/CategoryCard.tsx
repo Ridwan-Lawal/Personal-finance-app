@@ -1,8 +1,9 @@
 import BudgetOverview from "@/app/_components/budgets/BudgetOverview";
 import LatestSpending from "@/app/_components/budgets/LatestSpending";
 import Menu from "@/app/_components/budgets/Menu";
+import { budgets } from "@/app/_lib/supabase/server";
 
-export default function CategoryCard() {
+export default function CategoryCard({ budget }: { budget: budgets }) {
   return (
     <div className="relative space-y-5 rounded-[12px] border bg-white px-5 py-6 md:px-8">
       {/* haader */}
@@ -11,7 +12,7 @@ export default function CategoryCard() {
           <div className="bg-green size-4 rounded-full" />
           <h3 className="text-preset-2 text-grey-900 capitalize">
             {" "}
-            Entertainment
+            {budget?.category}
           </h3>
         </div>
 
@@ -20,10 +21,15 @@ export default function CategoryCard() {
       </div>
 
       {/* ======== Budget Overview ======= */}
-      <BudgetOverview />
+      <BudgetOverview budget={budget} />
 
       {/* latest spending */}
       <LatestSpending />
     </div>
   );
 }
+
+// deal with the latest spending,
+// edit budgets,
+// delete budgets,
+// charts

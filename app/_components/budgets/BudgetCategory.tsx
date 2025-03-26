@@ -1,23 +1,40 @@
 "use client";
 
 import { useDropdown } from "@/app/_hooks/useDropdown";
+import { getBudgets } from "@/app/_lib/data-service-client";
 import chevronDown from "@/public/icon-caret-down.svg";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 
 const CATEGORIES = [
-  "entertainment",
-  "bills",
-  "groceries",
-  "dining out",
-  "transportation",
-  "personal care",
-  "lifestyle",
-  "education",
+  "Entertainment",
+  "Bills",
+  "Groceries",
+  "Dining Out",
+  "Transportation",
+  "Personal Care",
+  "Lifestyle",
+  "Education",
 ];
 
-export default function BudgetCategory() {
-  const [budgetCategory, setBudgetCategory] = useState("entertainment");
+export default function BudgetCategory({
+  inputDisable,
+}: {
+  inputDisable: boolean;
+}) {
+  const { data: budgets } = useSuspenseQuery({
+    queryKey: ["budgets"],
+    queryFn: () => getBudgets(),
+  });
+
+  const categoriesCreated = budgets?.map((budget) => budget?.category);
+
+  const defaultCategory = CATEGORIES?.filter(
+    (categories) => !categoriesCreated?.includes(categories),
+  )?.at(0);
+
+  const [budgetCategory, setBudgetCategory] = useState(defaultCategory);
 
   const { isDropdownOpen, onOpenDropdown } = useDropdown(".budget-category");
 
@@ -35,6 +52,8 @@ export default function BudgetCategory() {
         <input
           type="text"
           name="category"
+          disabled={inputDisable}
+          aria-disabled={inputDisable}
           id="category"
           value={budgetCategory}
           autoComplete="category"
@@ -53,14 +72,24 @@ export default function BudgetCategory() {
       {isDropdownOpen && (
         <ul className="scrollbar-thin scrollbar-track-white scrollbar-thumb-gray-300 absolute top-20 z-40 h-[250px] w-full space-y-3 overflow-auto rounded-lg border bg-white px-5 py-3 shadow-md shadow-gray-200">
           {CATEGORIES?.map((category) => (
-            <li
-              key={category}
-              className="flex cursor-pointer flex-col gap-1"
-              onClick={() => onUpdateBudgetCategory(category)}
-            >
-              <span className="text-preset-4 text-grey-900 hover:text-grey-500 capitalize">
-                {category}
-              </span>
+            <li key={category}>
+              <button
+                type="button"
+                className="disabled:text-grey-300 flex w-full cursor-pointer items-center justify-between gap-1"
+                onClick={() => onUpdateBudgetCategory(category)}
+                disabled={categoriesCreated?.includes(category)}
+              >
+                <span
+                  className={`text-preset-4 capitalize ${budgetCategory === category && "font-bold"} ${categoriesCreated?.includes(category) ? "text-grey-300" : "text-grey-900 hover:text-grey-500"}`}
+                >
+                  {category}
+                </span>
+                {categoriesCreated?.includes(category) && (
+                  <span className="text-preset-5 text-grey-500">
+                    Already created
+                  </span>
+                )}
+              </button>
             </li>
           ))}
         </ul>
