@@ -15,8 +15,10 @@ function Progress({
   className,
   value,
   indicatorClassName,
+  max,
   ...props
 }: CustomProgressProps) {
+  const percentage = Math.min(((value ?? 0) / (max ?? 0)) * 100, 100);
   return (
     <div className="bg-beige-100 relative flex h-8 w-full items-center overflow-hidden rounded-sm px-1 py-1">
       <ProgressPrimitive.Root
@@ -30,7 +32,9 @@ function Progress({
         <ProgressPrimitive.Indicator
           data-slot="progress-indicator"
           className={`${indicatorClassName} h-full w-full flex-1 transition-all`}
-          style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+          style={{
+            transform: `translateX(-${100 - percentage}%)`,
+          }}
         />
       </ProgressPrimitive.Root>
     </div>

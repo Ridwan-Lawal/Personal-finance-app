@@ -10,7 +10,7 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function BudgetEditForm() {
@@ -35,7 +35,7 @@ export default function BudgetEditForm() {
     <AnimatePresence>
       {isEditModalOpen && (
         <motion.div
-          className={`form fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden bg-black/20 px-6 backdrop-blur-sm`}
+          className={`form fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden bg-black/20 px-6 backdrop-blur-[2px]`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -67,7 +67,9 @@ export default function BudgetEditForm() {
 
             {/* form */}
             <form action="" autoComplete="on" className="space-y-4">
-              <BudgetCategory />
+              <Suspense fallback={<div>Loading...</div>}>
+                <BudgetCategory />
+              </Suspense>
               <BudgetFormInput
                 htmlFor="maxSpending"
                 label="Maximum Spending"
@@ -75,7 +77,7 @@ export default function BudgetEditForm() {
               >
                 <p className="text-beige-500 text-preset-4">$</p>
                 <input
-                  type="text"
+                  type="number"
                   name="maxSpending"
                   id="maxSpending"
                   autoComplete="maxSpending"
@@ -84,9 +86,13 @@ export default function BudgetEditForm() {
                   aria-live="polite"
                   className="basic-input"
                   placeholder="e.g 2000"
+                  min={5}
                 />
               </BudgetFormInput>
-              <BudgetColor />
+
+              <Suspense fallback={<div>Loading...</div>}>
+                <BudgetColor />
+              </Suspense>
 
               <button className="btn btn-primary flex w-full justify-center capitalize">
                 add budget

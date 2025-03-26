@@ -3,6 +3,7 @@
 import BudgetCategory from "@/app/_components/budgets/BudgetCategory";
 import BudgetColor from "@/app/_components/budgets/BudgetColor";
 import BudgetFormInput from "@/app/_components/budgets/BudgetFormInput";
+import { addBudgetAction } from "@/app/_lib/actions/dashboardActions";
 import {
   getBudgetSliceReducer,
   onUpdateModalOpening,
@@ -10,10 +11,18 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect } from "react";
+import { Suspense, useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function BudgetAddForm() {
+  const [state, formAction, isAddingBudget] = useActionState(
+    addBudgetAction,
+    null,
+  );
+
+  const { errors, inputs } = state ?? {};
+
   const { isModalOpen } = useSelector(getBudgetSliceReducer);
   const dispatch = useDispatch();
 
@@ -33,11 +42,22 @@ export default function BudgetAddForm() {
     return () => window.removeEventListener("click", onBlurModal);
   }, [dispatch]);
 
+  useEffect(() => {
+    if (state) {
+      if (state?.success) {
+        toast.success(state?.message);
+        dispatch(onUpdateModalOpening(false));
+      } else if (state?.success === false) {
+        toast.error(state?.message);
+      }
+    }
+  }, [state, dispatch]);
+
   return (
     <AnimatePresence>
       {isModalOpen && (
         <motion.div
-          className={`form fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden bg-black/20 px-6 backdrop-blur-sm`}
+          className={`form fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden bg-black/20 px-6 backdrop-blur-[2px]`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -69,30 +89,47 @@ export default function BudgetAddForm() {
             </p>
 
             {/* form */}
-            <form action="" autoComplete="on" className="space-y-4">
-              <BudgetCategory />
+            <form action={formAction} autoComplete="on" className="space-y-4">
+              <Suspense fallback={<div>Loading...</div>}>
+                <BudgetCategory inputDisable={isAddingBudget} />
+              </Suspense>
               <BudgetFormInput
                 htmlFor="maxSpending"
                 label="Maximum Spending"
-                error=""
+                error={errors?.maxSpending?.at(0)}
               >
                 <p className="text-beige-500 text-preset-4">$</p>
                 <input
-                  type="text"
+                  type="number"
                   name="maxSpending"
                   id="maxSpending"
                   autoComplete="maxSpending"
-                  defaultValue=""
+                  defaultValue={(inputs?.maxSpending as number) ?? 5}
                   aria-label="maximum spending"
                   aria-live="polite"
                   className="basic-input"
                   placeholder="e.g 2000"
+                  disabled={isAddingBudget}
+                  aria-disabled={isAddingBudget}
+                  aria-describedby="maxSpending-error"
+                  aria-invalid={!!errors?.maxSpending}
+                  min={5}
                 />
               </BudgetFormInput>
-              <BudgetColor />
 
-              <button className="btn btn-primary flex w-full justify-center capitalize">
-                add budget
+              <Suspense fallback={<div>Loading...</div>}>
+                <BudgetColor inputDisable={isAddingBudget} />
+              </Suspense>
+
+              <button
+                className="btn btn-primary flex w-full justify-center capitalize disabled:opacity-80"
+                disabled={isAddingBudget}
+              >
+                {isAddingBudget ? (
+                  <span className="italic">Adding Budget...</span>
+                ) : (
+                  "add budget"
+                )}
               </button>
             </form>
           </motion.div>

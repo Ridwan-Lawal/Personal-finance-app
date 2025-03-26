@@ -111,3 +111,57 @@ export async function getBase64Image(imageUrl: string | null) {
     }
   }
 }
+
+export const getBudgets = cache(async function () {
+  const supabase = await createClient();
+
+  // Checking if user is signed in...
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You need to be signed in to get this data!");
+  }
+
+  // Getting data
+
+  const { data: budgets, error } = await supabase
+    .from("budgets")
+    .select("*")
+    .eq("userId", user?.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return budgets;
+});
+
+export async function getTransactionByCategory(category: string | null) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You need to be signed to get this data!");
+  }
+
+  // getting the data
+  if (category) {
+    const { data: transactions, error } = await supabase
+      .from("transactions")
+      .select("*")
+      .eq("userId", user?.id)
+      .eq("category", category)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw new Error(error?.message);
+    }
+
+    return transactions;
+  }
+}
