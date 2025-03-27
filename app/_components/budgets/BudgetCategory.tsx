@@ -20,9 +20,13 @@ const CATEGORIES = [
 
 export default function BudgetCategory({
   inputDisable,
+  defaultCategoryToEdit,
 }: {
-  inputDisable: boolean;
+  inputDisable?: boolean;
+  defaultCategoryToEdit?: string | null;
 }) {
+  console.log(defaultCategoryToEdit, "eddiiiiiiiit");
+
   const { data: budgets } = useSuspenseQuery({
     queryKey: ["budgets"],
     queryFn: () => getBudgets(),
@@ -30,9 +34,11 @@ export default function BudgetCategory({
 
   const categoriesCreated = budgets?.map((budget) => budget?.category);
 
-  const defaultCategory = CATEGORIES?.filter(
-    (categories) => !categoriesCreated?.includes(categories),
-  )?.at(0);
+  const defaultCategory =
+    defaultCategoryToEdit ||
+    CATEGORIES?.filter(
+      (categories) => !categoriesCreated?.includes(categories),
+    )?.at(0);
 
   const [budgetCategory, setBudgetCategory] = useState(defaultCategory);
 

@@ -8,14 +8,15 @@ import { cn } from "@/lib/utils";
 interface CustomProgressProps
   extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   value?: number;
-  indicatorClassName?: string;
+  budgetColorTag?: string | undefined;
 }
 
 function Progress({
   className,
   value,
-  indicatorClassName,
+
   max,
+  budgetColorTag,
   ...props
 }: CustomProgressProps) {
   const percentage = Math.min(((value ?? 0) / (max ?? 0)) * 100, 100);
@@ -31,7 +32,7 @@ function Progress({
       >
         <ProgressPrimitive.Indicator
           data-slot="progress-indicator"
-          className={`${indicatorClassName} h-full w-full flex-1 transition-all`}
+          className={`${budgetColorTag} h-full w-full flex-1 transition-all`}
           style={{
             transform: `translateX(-${100 - percentage}%)`,
           }}

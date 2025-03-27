@@ -1,7 +1,9 @@
 import BudgetOverview from "@/app/_components/budgets/BudgetOverview";
 import LatestSpending from "@/app/_components/budgets/LatestSpending";
 import Menu from "@/app/_components/budgets/Menu";
+import { getColorStyles } from "@/app/_lib/helper";
 import { budgets } from "@/app/_lib/supabase/server";
+import { Suspense } from "react";
 
 export default function CategoryCard({ budget }: { budget: budgets }) {
   return (
@@ -9,7 +11,9 @@ export default function CategoryCard({ budget }: { budget: budgets }) {
       {/* haader */}
       <div className="flex w-full items-center justify-between border">
         <div className="flex items-center gap-4">
-          <div className="bg-green size-4 rounded-full" />
+          <div
+            className={`${getColorStyles(budget?.colorTag)} size-4 rounded-full`}
+          />
           <h3 className="text-preset-2 text-grey-900 capitalize">
             {" "}
             {budget?.category}
@@ -17,19 +21,19 @@ export default function CategoryCard({ budget }: { budget: budgets }) {
         </div>
 
         {/* menu and dropdown */}
-        <Menu />
+        <Menu budgetCategory={budget?.category} budgetId={budget?.id} />
       </div>
 
       {/* ======== Budget Overview ======= */}
-      <BudgetOverview budget={budget} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <BudgetOverview budget={budget} />
+      </Suspense>
 
       {/* latest spending */}
-      <LatestSpending />
+      <LatestSpending budgetCategory={budget?.category} />
     </div>
   );
 }
 
-// deal with the latest spending,
-// edit budgets,
-// delete budgets,
+// see all
 // charts

@@ -1,43 +1,39 @@
 "use client";
 
 import { useDropdown } from "@/app/_hooks/useDropdown";
+import { COLORS } from "@/app/_lib/constant";
 import { getBudgets } from "@/app/_lib/data-service-client";
 import chevronDown from "@/public/icon-caret-down.svg";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 
-const COLORS = [
-  { color: "green", style: "bg-green" },
-  { color: "yellow", style: "bg-yellow" },
-  { color: "cyan", style: "bg-cyan" },
-  { color: "red", style: "bg-red" },
-  { color: "purple", style: "bg-purple" },
-  { color: "turquoise", style: "bg-turquoise" },
-  { color: "brown", style: "bg-brown" },
-  { color: "magenta", style: "bg-magenta" },
-  { color: "blue", style: "bg-blue" },
-  { color: "gold", style: "bg-gold" },
-  { color: "orange", style: "bg-orange" },
-  { color: "army green", style: "bg-army-green" },
-  { color: "navy grey", style: "bg-navy-grey" },
-];
-
 export default function BudgetColor({
   inputDisable,
+  defaultColorToEdit,
 }: {
-  inputDisable: boolean;
+  inputDisable?: boolean;
+  defaultColorToEdit?: string | null;
 }) {
   const { data: budgets } = useSuspenseQuery({
     queryKey: ["budgets"],
     queryFn: () => getBudgets(),
   });
 
+  // The colors that have been used to create a budget
   const colorTagsUsed = budgets?.map((budget) => budget?.colorTag);
 
-  const defaultColor = COLORS.filter(
-    (color) => !colorTagsUsed?.includes(color?.color),
+  // default color when you click on edit form
+  const colorToEdit = COLORS?.filter(
+    (color) => color?.color?.toLowerCase() === defaultColorToEdit,
   )?.at(0);
+
+  // Form default color
+  const defaultColor =
+    colorToEdit ||
+    COLORS.filter((color) => !colorTagsUsed?.includes(color?.color))?.at(0);
+
+  console.log(defaultColor, colorToEdit, "okaaay");
 
   const [budgetColor, setBudgetColor] = useState(defaultColor);
   const { isDropdownOpen, onOpenDropdown } = useDropdown(".color-tag");

@@ -3,20 +3,45 @@
 import BudgetCategory from "@/app/_components/budgets/BudgetCategory";
 import BudgetColor from "@/app/_components/budgets/BudgetColor";
 import BudgetFormInput from "@/app/_components/budgets/BudgetFormInput";
+import { editBudgetAction } from "@/app/_lib/actions/dashboardActions";
+import { getBudgets } from "@/app/_lib/data-service-client";
 import {
   getBudgetSliceReducer,
   onUpdateEditModalOpening,
 } from "@/app/_lib/redux/budgetSlice";
 import cancelIcon from "@/public/icon-close-modal.svg";
+import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { Suspense, useEffect } from "react";
+import { Suspense, useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function BudgetEditForm() {
-  const { isEditModalOpen } = useSelector(getBudgetSliceReducer);
+  const [state, formAction, isUpdatingBudget] = useActionState(
+    editBudgetAction,
+    null,
+  );
+
+  const { errors, inputs } = state ?? {};
+
+  const { isEditModalOpen, budgetToEdit } = useSelector(getBudgetSliceReducer);
   const dispatch = useDispatch();
 
+  // Getting all budgets
+  const { data: budgets } = useQuery({
+    queryKey: ["budgets"],
+    queryFn: () => getBudgets(),
+  });
+
+  // Filtering the budgets to get the budget we want to edit
+  const budget = budgets?.filter(
+    (budget) =>
+      budget?.category?.toLowerCase() ===
+      (budgetToEdit as string).toLowerCase(),
+  );
+
+  // Effect for closing modal when you click outside it
   useEffect(() => {
     function onBlurModal(e: Event) {
       const target = e.target as HTMLElement;
@@ -30,6 +55,18 @@ export default function BudgetEditForm() {
 
     return () => window.removeEventListener("click", onBlurModal);
   }, [dispatch]);
+
+  // Effect for displaying toast notification when updating budgets
+  useEffect(() => {
+    if (state) {
+      if (state?.success) {
+        toast.success(state?.message);
+        dispatch(onUpdateEditModalOpening(false));
+      } else if (state?.success === false) {
+        toast.error(state?.message);
+      }
+    }
+  }, [state, dispatch]);
 
   return (
     <AnimatePresence>
@@ -66,14 +103,18 @@ export default function BudgetEditForm() {
             </p>
 
             {/* form */}
-            <form action="" autoComplete="on" className="space-y-4">
+            <form action={formAction} autoComplete="on" className="space-y-4">
+              <input type="hidden" name="budgetId" value={budget?.at(0)?.id} />
               <Suspense fallback={<div>Loading...</div>}>
-                <BudgetCategory />
+                <BudgetCategory
+                  defaultCategoryToEdit={budget?.at(0)?.category}
+                  inputDisable={isUpdatingBudget}
+                />
               </Suspense>
               <BudgetFormInput
                 htmlFor="maxSpending"
                 label="Maximum Spending"
-                error=""
+                error={errors?.maxSpending?.at(0)}
               >
                 <p className="text-beige-500 text-preset-4">$</p>
                 <input
@@ -81,9 +122,17 @@ export default function BudgetEditForm() {
                   name="maxSpending"
                   id="maxSpending"
                   autoComplete="maxSpending"
-                  defaultValue=""
+                  defaultValue={
+                    budget?.at(0)?.maxSpending ||
+                    (inputs?.maxSpending as number) ||
+                    5
+                  }
+                  disabled={isUpdatingBudget}
+                  aria-disabled={isUpdatingBudget}
                   aria-label="maximum spending"
                   aria-live="polite"
+                  aria-describedby="maxSpending-error"
+                  aria-invalid={!!errors?.maxSpending?.at(0)}
                   className="basic-input"
                   placeholder="e.g 2000"
                   min={5}
@@ -91,11 +140,22 @@ export default function BudgetEditForm() {
               </BudgetFormInput>
 
               <Suspense fallback={<div>Loading...</div>}>
-                <BudgetColor />
+                <BudgetColor
+                  defaultColorToEdit={budget?.at(0)?.colorTag}
+                  inputDisable={isUpdatingBudget}
+                />
               </Suspense>
 
-              <button className="btn btn-primary flex w-full justify-center capitalize">
-                add budget
+              <button
+                className="btn btn-primary flex w-full justify-center capitalize"
+                disabled={isUpdatingBudget}
+                aria-disabled={isUpdatingBudget}
+              >
+                {isUpdatingBudget ? (
+                  <span className="italic">Saving Changes...</span>
+                ) : (
+                  "Save Changes"
+                )}
               </button>
             </form>
           </motion.div>

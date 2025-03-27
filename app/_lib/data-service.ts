@@ -138,7 +138,9 @@ export const getBudgets = cache(async function () {
   return budgets;
 });
 
-export async function getTransactionByCategory(category: string | null) {
+export const getTransactionByCategory = cache(async function (
+  category: string | null,
+) {
   const supabase = await createClient();
 
   const {
@@ -164,4 +166,4 @@ export async function getTransactionByCategory(category: string | null) {
 
     return transactions;
   }
-}
+});

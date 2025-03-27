@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  onUpdateBudgetToDelete,
+  onUpdateBudgetToEdit,
   onUpdateDeleteModalOpening,
   onUpdateEditModalOpening,
 } from "@/app/_lib/redux/budgetSlice";
@@ -8,7 +10,13 @@ import { Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-export default function Menu() {
+export default function Menu({
+  budgetCategory,
+  budgetId,
+}: {
+  budgetCategory: string | null;
+  budgetId: string | null;
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -17,8 +25,10 @@ export default function Menu() {
   function onClickMenuOption(option: string) {
     if (option === "edit") {
       dispatch(onUpdateEditModalOpening(true));
+      dispatch(onUpdateBudgetToEdit(budgetCategory));
     } else {
       dispatch(onUpdateDeleteModalOpening(true));
+      dispatch(onUpdateBudgetToDelete({ budgetId, budgetCategory }));
     }
   }
 
