@@ -1,4 +1,5 @@
 import { getTransactionByCategory } from "@/app/_lib/data-service";
+import { getColorStyles } from "@/app/_lib/helper";
 import { budgets } from "@/app/_lib/supabase/server";
 import { Progress } from "@/components/ui/progress";
 
@@ -34,19 +35,24 @@ export default async function BudgetOverview({ budget }: { budget: budgets }) {
       <Progress
         value={spent}
         max={budget?.maxSpending as number | undefined}
-        indicatorClassName="bg-green"
+        budgetColorTag={getColorStyles(budget?.colorTag)}
       />
 
       {/* spent and free */}
 
       <div className="flex items-center gap-4">
         {/* spent */}
-        <div className="border-green flex w-1/2 flex-col gap-1 border-l-4 px-4">
-          <p className="text-preset-5 text-grey-500">Spent</p>
+        <div className="flex w-1/2 gap-4">
+          <div
+            className={`${getColorStyles(budget?.colorTag)} w-[5px] border`}
+          />
+          <div className="flex flex-col gap-1">
+            <p className="text-preset-5 text-grey-500">Spent</p>
 
-          <p className="text-preset-4-bold text-grey-900">
-            ${spent?.toFixed(2)}
-          </p>
+            <p className="text-preset-4-bold text-grey-900">
+              ${spent?.toFixed(2)}
+            </p>
+          </div>
         </div>
 
         {/* free */}

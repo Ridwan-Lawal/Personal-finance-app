@@ -5,6 +5,8 @@ export const initialState = {
   isModalOpen: false,
   isEditModalOpen: false,
   isDeleteModalOpen: false,
+  budgetToEdit: "",
+  budgetToDelete: {},
 };
 
 const budgetSlice = createSlice({
@@ -20,6 +22,13 @@ const budgetSlice = createSlice({
     onUpdateDeleteModalOpening(state, action) {
       state.isDeleteModalOpen = action.payload;
     },
+    onUpdateBudgetToEdit(state, action) {
+      state.budgetToEdit = action.payload;
+    },
+
+    onUpdateBudgetToDelete(state, action) {
+      state.budgetToDelete = action.payload;
+    },
   },
 });
 
@@ -27,6 +36,8 @@ export const {
   onUpdateModalOpening,
   onUpdateDeleteModalOpening,
   onUpdateEditModalOpening,
+  onUpdateBudgetToEdit,
+  onUpdateBudgetToDelete,
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

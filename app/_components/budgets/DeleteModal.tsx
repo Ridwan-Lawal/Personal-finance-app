@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteBudgetAction } from "@/app/_lib/actions/dashboardActions";
 import {
   getBudgetSliceReducer,
   onUpdateDeleteModalOpening,
@@ -7,13 +8,24 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function DeleteModal() {
-  const { isDeleteModalOpen } = useSelector(getBudgetSliceReducer);
+  const [state, formAction, isDeletingBudget] = useActionState(
+    deleteBudgetAction,
+    null,
+  );
+
+  console.log(state, "successs");
+
+  const { isDeleteModalOpen, budgetToDelete } = useSelector(
+    getBudgetSliceReducer,
+  );
   const dispatch = useDispatch();
 
+  // Effect to remove modal when mouse click outside the modal
   useEffect(() => {
     function onBlurModal(e: Event) {
       const target = e.target as HTMLElement;
@@ -27,11 +39,25 @@ export default function DeleteModal() {
     return () => window.removeEventListener("click", onBlurModal);
   }, [dispatch]);
 
+  //Effect to display toast notification upon deleting a budget
+
+  useEffect(() => {
+    if (state) {
+      if (state?.success) {
+        toast.success(state?.message);
+
+        dispatch(onUpdateDeleteModalOpening(false));
+      } else if (state?.success === false) {
+        toast.error(state?.message);
+      }
+    }
+  }, [state, dispatch]);
+
   return (
     <AnimatePresence>
       {isDeleteModalOpen && (
         <motion.div
-          className={`form fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden bg-black/20 px-6 backdrop-blur-sm`}
+          className={`form fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden bg-black/20 px-6 backdrop-blur-[2px]`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -47,7 +73,7 @@ export default function DeleteModal() {
           >
             <div className="flex items-center justify-between">
               <h1 className="text-preset-1-2 text-grey-900">
-                Delete &apos;Enterainment&apos;
+                Delete &apos;{budgetToDelete?.budgetCategory}&apos;
               </h1>
               <Image
                 src={cancelIcon}
@@ -62,9 +88,29 @@ export default function DeleteModal() {
               reversed, and all the data inside it will be removed forever.
             </p>
 
-            <button className="btn-destroy w-full items-center justify-center capitalize">
-              yes, confirm deletion
-            </button>
+            <form action={formAction}>
+              <input
+                type="hidden"
+                name="budgetId"
+                value={budgetToDelete?.budgetId}
+              />
+              <input
+                type="hidden"
+                name="budgetCategory"
+                value={budgetToDelete?.budgetCategory}
+              />
+              <button
+                className="btn-destroy w-full items-center justify-center capitalize"
+                disabled={isDeletingBudget}
+                aria-disabled={isDeletingBudget}
+              >
+                {isDeletingBudget ? (
+                  <span className="italic">deleting budget...</span>
+                ) : (
+                  "yes, confirm deletion"
+                )}
+              </button>
+            </form>
 
             <button
               className="text-grey-500 text-preset-4 hover:text-grey-300 w-full cursor-pointer capitalize transition-all"

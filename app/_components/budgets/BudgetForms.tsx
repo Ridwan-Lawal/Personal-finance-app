@@ -19,7 +19,6 @@ export default async function BudgetForms() {
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <BudgetAddForm />
-
         <BudgetEditForm />
       </HydrationBoundary>
     </>
