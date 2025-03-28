@@ -35,5 +35,4 @@ export default function CategoryCard({ budget }: { budget: budgets }) {
   );
 }
 
-// see all
 // charts

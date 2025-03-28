@@ -19,13 +19,17 @@ export default function Page() {
 
       {/* Spending summary */}
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        <SpendingSummary />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SpendingSummary />
+        </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
           <Budgets />
         </Suspense>
       </div>
 
-      <BudgetForms />
+      <Suspense fallback={<div>Loading forms...</div>}>
+        <BudgetForms />
+      </Suspense>
       <DeleteModal />
     </div>
   );

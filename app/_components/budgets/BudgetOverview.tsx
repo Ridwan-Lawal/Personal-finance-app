@@ -60,9 +60,12 @@ export default async function BudgetOverview({ budget }: { budget: budgets }) {
           <p className="text-preset-5 text-grey-500">Remaining</p>
 
           <p className="text-preset-4-bold text-grey-900">
+            {budget?.maxSpending && spent && budget?.maxSpending - spent < 0
+              ? "-"
+              : ""}
             $
             {budget?.maxSpending && spent
-              ? (budget?.maxSpending - spent).toFixed(2)
+              ? Math.abs(budget?.maxSpending - spent).toFixed(2)
               : "N / A"}
           </p>
         </div>

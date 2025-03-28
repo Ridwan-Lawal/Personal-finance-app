@@ -1,6 +1,6 @@
+import SeeAll from "@/app/_components/budgets/SeeAll";
 import SpendingCard from "@/app/_components/budgets/SpendingCard";
 import { getTransactionByCategory } from "@/app/_lib/data-service";
-import { Chevron } from "@/app/_ui/NavIcons";
 
 export default async function LatestSpending({
   budgetCategory,
@@ -25,10 +25,7 @@ export default async function LatestSpending({
           latest spending
         </h3>
 
-        <div className="flex items-center gap-3">
-          <p className="text-preset-4 text-grey-500 capitalize">see all</p>
-          <Chevron className="h-[5px] w-2" />
-        </div>
+        <SeeAll budgetCategory={budgetCategory} />
       </div>
 
       {/* spendings */}
