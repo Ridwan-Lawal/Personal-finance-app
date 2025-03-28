@@ -1,8 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import { Label, Pie, PieChart } from "recharts";
 
+import { budgets } from "@/app/_lib/supabase/server";
 import {
   Card,
   CardContent,
@@ -18,60 +19,66 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-];
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig;
+type ChartsProps = {
+  budgets: budgets[];
+  chartData: {
+    category: string | null;
+    spent: number;
+    fill: string | undefined;
+  }[];
+  chartConfig: ChartConfig;
+};
 
-export function Component() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+export function ChartsSummary({
+  budgets,
+  chartData,
+  chartConfig,
+}: ChartsProps) {
+  const labelRef = useRef<SVGTextElement>(null);
+  const [innerRadius, setInnerRadius] = useState(72);
+
+  const totalMaxSpeding = budgets?.reduce(
+    (acc, cur) => (cur?.maxSpending ? acc + cur?.maxSpending : acc),
+    0,
+  );
+
+  const totalSpentForAllBudgets = chartData?.reduce(
+    (acc, cur) => acc + cur.spent,
+    0,
+  );
+
+  // for expanding the inner radius as the label increases
+  useEffect(() => {
+    if (labelRef.current) {
+      // Get the bounding box of the label
+      const bbox = labelRef.current.getBBox();
+
+      // Calculate the diagonal of the bounding box and add some padding
+      const dynamicInnerRadius = Math.max(
+        72, // Minimum inner radius
+        Math.ceil(Math.sqrt(bbox.width ** 2 + bbox.height ** 2) / 2) + 20,
+      );
+
+      setInnerRadius(dynamicInnerRadius);
+    }
+  }, [totalSpentForAllBudgets, totalMaxSpeding]);
 
   return (
     <Card className="border-red flex h-fit flex-col">
       <CardHeader className="hidden items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
+        <CardTitle>Pie Chart - Donut with Dynamic Text</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="-my-8 min-h-fit flex-1 border pb-0">
         <ChartContainer
           config={chartConfig}
-          className="border-green mx-auto aspect-square h-[270px] max-h-fit w-[270px] border"
+          className="border-green mx-auto aspect-square h-[293px] max-h-fit w-[293px] border"
         >
           <PieChart
             className="border border-amber-600"
-            width={270}
-            height={270}
+            width={293}
+            height={293}
           >
             <ChartTooltip
               cursor={false}
@@ -79,9 +86,9 @@ export function Component() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
-              innerRadius={65}
+              dataKey="spent"
+              nameKey="category"
+              innerRadius={innerRadius}
               strokeWidth={5}
               className="border-blue border"
             >
@@ -90,25 +97,26 @@ export function Component() {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
                       <text
+                        ref={labelRef}
                         x={viewBox.cx}
                         y={viewBox.cy}
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        className="space-y-2"
+                        className="space-y-3"
                       >
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
                           className="text-preset-1 text-grey-900"
                         >
-                          $338
+                          ${totalSpentForAllBudgets}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="text-preset-5 text-grey-500"
                         >
-                          Visitors
+                          of ${totalMaxSpeding} limit
                         </tspan>
                       </text>
                     );
