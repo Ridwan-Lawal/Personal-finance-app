@@ -9,4 +9,15 @@ export interface StoreType {
       budgetCategory: string;
     };
   };
+
+  potSliceStore: {
+    isAddNewPotModalOpen: boolean;
+    isEditPotModalOpen: boolean;
+    isDeletePotModalOpen: boolean;
+    potToEditId: string;
+    potToDelete: {
+      potId: string;
+      potName: string;
+    };
+  };
 }
