@@ -36,6 +36,36 @@ export type Database = {
         }
         Relationships: []
       }
+      pots: {
+        Row: {
+          created_at: string
+          id: string
+          potCurrentBalance: number | null
+          potName: string | null
+          potTarget: number | null
+          potTheme: string | null
+          userId: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          potCurrentBalance?: number | null
+          potName?: string | null
+          potTarget?: number | null
+          potTheme?: string | null
+          userId?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          potCurrentBalance?: number | null
+          potName?: string | null
+          potTarget?: number | null
+          potTheme?: string | null
+          userId?: string | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number | null

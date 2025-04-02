@@ -2,7 +2,7 @@
 
 import PotColor from "@/app/_components/pots/PotColor";
 import PotsFormInput from "@/app/_components/pots/PotsFormInput";
-import { addBudgetAction } from "@/app/_lib/actions/dashboardActions";
+import { addNewPotAction } from "@/app/_lib/actions/potActions";
 import {
   getPotsSliceReducer,
   onUpdateAddPotModalOpening,
@@ -15,12 +15,14 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function AddNewPotForm() {
-  const [state, formAction, isAddingBudget] = useActionState(
-    addBudgetAction,
+  const [state, formAction, isAddingNewPot] = useActionState(
+    addNewPotAction,
     null,
   );
 
   const { errors, inputs } = state ?? {};
+
+  console.log(errors);
 
   const { isAddNewPotModalOpen } = useSelector(getPotsSliceReducer);
   const dispatch = useDispatch();
@@ -86,22 +88,31 @@ export default function AddNewPotForm() {
 
             {/* form */}
             <form action={formAction} autoComplete="on" className="space-y-4">
-              <PotsFormInput htmlFor="potName" label="Pot Name" error="">
+              <PotsFormInput
+                htmlFor="potName"
+                label="Pot Name"
+                error={errors?.potName?.at(0)}
+              >
                 <input
                   type="text"
                   name="potName"
                   id="potName"
-                  defaultValue=""
+                  defaultValue={inputs?.potName as string}
                   autoComplete="pot-name"
+                  aria-describedby="potName-error"
+                  aria-invalid={!!errors?.potName?.at(0)}
+                  disabled={isAddingNewPot}
+                  aria-disabled={isAddingNewPot}
                   aria-live="polite"
                   aria-label="pot name"
                   className="basic-input"
+                  placeholder="e.g Savings"
                 />
               </PotsFormInput>
               <PotsFormInput
                 htmlFor="potTarget"
                 label="Target"
-                error={errors?.maxSpending?.at(0)}
+                error={errors?.potTarget?.at(0)}
               >
                 <p className="text-beige-500 text-preset-4">$</p>
                 <input
@@ -109,31 +120,32 @@ export default function AddNewPotForm() {
                   name="potTarget"
                   id="potTarget"
                   autoComplete="pot-target"
-                  defaultValue={(inputs?.maxSpending as number) ?? 5}
+                  defaultValue={(inputs?.potTarget as number) ?? 5}
                   aria-label="pot target"
                   aria-live="polite"
                   className="basic-input"
                   placeholder="e.g 2000"
-                  disabled={isAddingBudget}
-                  aria-disabled={isAddingBudget}
+                  disabled={isAddingNewPot}
+                  aria-disabled={isAddingNewPot}
                   aria-describedby="potTarget-error"
-                  aria-invalid={!!errors?.maxSpending}
+                  aria-invalid={!!errors?.potTarget?.at(0)}
                   min={5}
                 />
               </PotsFormInput>
 
               <Suspense fallback={<div>Loading...</div>}>
-                <PotColor inputDisable={isAddingBudget} />
+                <PotColor inputDisable={isAddingNewPot} />
               </Suspense>
 
               <button
                 className="btn btn-primary flex w-full justify-center capitalize disabled:opacity-80"
-                disabled={isAddingBudget}
+                disabled={isAddingNewPot}
+                aria-disabled={isAddingNewPot}
               >
-                {isAddingBudget ? (
-                  <span className="italic">Adding Budget...</span>
+                {isAddingNewPot ? (
+                  <span className="italic">Adding pot...</span>
                 ) : (
-                  "add budget"
+                  "add pot"
                 )}
               </button>
             </form>
@@ -143,5 +155,3 @@ export default function AddNewPotForm() {
     </AnimatePresence>
   );
 }
-
-// Copy this and build the edit form modals and other modals as well

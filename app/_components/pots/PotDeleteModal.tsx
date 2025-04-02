@@ -1,7 +1,6 @@
 "use client";
 
-import { deleteBudgetAction } from "@/app/_lib/actions/dashboardActions";
-import { onUpdateDeleteModalOpening } from "@/app/_lib/redux/budgetSlice";
+import { deletePotAction } from "@/app/_lib/actions/potActions";
 import {
   getPotsSliceReducer,
   onUpdateDeletePotModalOpening,
@@ -14,22 +13,23 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PotDeleteModal() {
-  const [state, formAction, isDeletingBudget] = useActionState(
-    deleteBudgetAction,
+  const [state, formAction, isDeletingPot] = useActionState(
+    deletePotAction,
     null,
   );
-
-  console.log(state, "successs");
 
   const { isDeletePotModalOpen, potToDelete } =
     useSelector(getPotsSliceReducer);
   const dispatch = useDispatch();
+
+  console.log(isDeletePotModalOpen, "delete moddalll");
 
   // Effect to remove modal when mouse click outside the modal
   useEffect(() => {
     function onBlurModal(e: Event) {
       const target = e.target as HTMLElement;
       if (!target.closest(".form-block") && !target.closest(".delete-option")) {
+        console.log("hey");
         dispatch(
           onUpdateDeletePotModalOpening({
             modalOpen: false,
@@ -90,7 +90,7 @@ export default function PotDeleteModal() {
               <Image
                 src={cancelIcon}
                 alt="cancel"
-                onClick={() => dispatch(onUpdateDeleteModalOpening(false))}
+                onClick={() => dispatch(onUpdateDeletePotModalOpening(false))}
                 priority={true}
                 className="cursor-pointer"
               />
@@ -101,19 +101,19 @@ export default function PotDeleteModal() {
             </p>
 
             <form action={formAction}>
-              <input type="hidden" name="budgetId" value={potToDelete?.potId} />
+              <input type="hidden" name="potId" value={potToDelete?.potId} />
               <input
                 type="hidden"
-                name="budgetCategory"
+                name="potName"
                 value={potToDelete?.potName}
               />
               <button
-                className="btn-destroy w-full items-center justify-center capitalize"
-                disabled={isDeletingBudget}
-                aria-disabled={isDeletingBudget}
+                className="btn-destroy w-full cursor-pointer items-center justify-center capitalize"
+                disabled={isDeletingPot}
+                aria-disabled={isDeletingPot}
               >
-                {isDeletingBudget ? (
-                  <span className="italic">deleting budget...</span>
+                {isDeletingPot ? (
+                  <span className="italic">deleting pot...</span>
                 ) : (
                   "yes, confirm deletion"
                 )}
@@ -122,7 +122,7 @@ export default function PotDeleteModal() {
 
             <button
               className="text-grey-500 text-preset-4 hover:text-grey-300 w-full cursor-pointer capitalize transition-all"
-              onClick={() => dispatch(onUpdateDeleteModalOpening(false))}
+              onClick={() => dispatch(onUpdateDeletePotModalOpening(false))}
             >
               no, go back
             </button>

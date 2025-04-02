@@ -15,13 +15,13 @@ export default function PotColor({
   inputDisable?: boolean;
   defaultColorToEdit?: string | null;
 }) {
-  const { data: budgets } = useSuspenseQuery({
-    queryKey: ["budgets"],
+  const { data: pots } = useSuspenseQuery({
+    queryKey: ["pots"],
     queryFn: () => getBudgets(),
   });
 
   // The colors that have been used to create a budget
-  const colorTagsUsed = budgets?.map((budget) => budget?.colorTag);
+  const colorTagsUsed = pots?.map((budget) => budget?.colorTag);
 
   // default color when you click on edit form
   const colorToEdit = COLORS?.filter(

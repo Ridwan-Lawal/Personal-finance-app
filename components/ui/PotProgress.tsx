@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils";
 
 interface CustomProgressProps
   extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
-  value?: number;
+  value?: number | null;
+  max: number;
   potTheme?: string | undefined;
 }
 
@@ -19,12 +20,13 @@ function PotProgress({
   ...props
 }: CustomProgressProps) {
   const percentage = Math.min(((value ?? 0) / (max ?? 0)) * 100, 100);
+
   return (
-    <div className="bg-beige-100 relative flex h-[8px] w-full items-center overflow-hidden rounded-sm px-1 py-1">
+    <div className="bg-beige-100 relative h-[8px] w-full overflow-hidden rounded-sm">
       <ProgressPrimitive.Root
         data-slot="progress"
         className={cn(
-          "bg-beige-100 relative h-6 w-full overflow-hidden rounded-sm",
+          "bg-beige-100 relative flex h-[8px] w-full items-center overflow-hidden rounded-sm",
           className,
         )}
         {...props}
@@ -37,6 +39,7 @@ function PotProgress({
           }}
         />
       </ProgressPrimitive.Root>
+      ;
     </div>
   );
 }
