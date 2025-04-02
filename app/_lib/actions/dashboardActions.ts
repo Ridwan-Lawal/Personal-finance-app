@@ -20,9 +20,9 @@ const Budgets = z.object({
   colorTag: z
     .string()
     .min(3, {
-      message: "Budget category should be 3 or more characters",
+      message: "Budget color tag should be 3 or more characters",
     })
-    .max(50, { message: "Budget category cannot exceed 50 characters" }),
+    .max(50, { message: "Budget color tag cannot exceed 50 characters" }),
 });
 
 export async function addBudgetAction(prevState: unknown, formData: FormData) {

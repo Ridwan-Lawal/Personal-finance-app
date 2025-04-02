@@ -32,3 +32,5 @@ export async function createClient() {
 export type budgets = Database["public"]["Tables"]["budgets"]["Row"];
 
 export type transactions = Database["public"]["Tables"]["transactions"]["Row"];
+
+export type Pot = Database["public"]["Tables"]["pots"]["Row"];

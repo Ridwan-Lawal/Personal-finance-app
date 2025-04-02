@@ -6,6 +6,7 @@ import {
   onUpdateDeleteModalOpening,
   onUpdateEditModalOpening,
 } from "@/app/_lib/redux/budgetSlice";
+import { AnimatePresence, motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -52,19 +53,27 @@ export default function Menu({
         <Ellipsis className="text-grey-300 size-3.5" />
       </button>
 
-      {isMenuOpen && (
-        <ul className="absolute top-12 right-5 z-30 w-fit rounded-lg border bg-white px-5 py-3 shadow-md shadow-gray-200">
-          {["edit", "delete"].map((option) => (
-            <li
-              key={option}
-              className={`text-preset-4 cursor-pointer capitalize hover:opacity-95 ${option === "edit" ? "text-grey-900 border-grey-100 edit-option mb-3 border-b pb-3" : "text-red delete-option"}`}
-              onClick={() => onClickMenuOption(option)}
-            >
-              {option} budget
-            </li>
-          ))}
-        </ul>
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.ul
+            className="absolute top-12 right-5 z-30 w-fit rounded-lg border bg-white px-5 py-3 shadow-md shadow-gray-200"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: "easeIn", duration: 0.1 }}
+          >
+            {["edit", "delete"].map((option) => (
+              <li
+                key={option}
+                className={`text-preset-4 cursor-pointer capitalize hover:opacity-95 ${option === "edit" ? "text-grey-900 border-grey-100 edit-option mb-3 border-b pb-3" : "text-red delete-option"}`}
+                onClick={() => onClickMenuOption(option)}
+              >
+                {option} budget
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

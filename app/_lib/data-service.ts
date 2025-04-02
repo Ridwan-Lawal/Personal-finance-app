@@ -167,3 +167,27 @@ export const getTransactionByCategory = cache(async function (
     return transactions;
   }
 });
+
+// ================ POTS ==========
+
+export async function getPots() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error("You need to be signed to fetch the pots data!");
+  }
+
+  const { data: pots, error } = await supabase
+    .from("pots")
+    .select("*")
+    .eq("userId", user?.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return pots;
+}

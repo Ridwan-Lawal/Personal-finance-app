@@ -19,5 +19,10 @@ export interface StoreType {
       potId: string;
       potName: string;
     };
+    isAddMoneyModalOpen: boolean;
+    potToAddMoney: {
+      potId: string;
+      potName: string;
+    };
   };
 }
