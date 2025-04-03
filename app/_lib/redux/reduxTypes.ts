@@ -24,5 +24,10 @@ export interface StoreType {
       potId: string;
       potName: string;
     };
+    isWithdrawMoneyModalOpen: boolean;
+    potToWithdrawMoney: {
+      potId: string;
+      potName: string;
+    };
   };
 }

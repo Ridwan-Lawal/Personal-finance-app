@@ -33,6 +33,15 @@ const PotAddMoney = z.object({
     }),
 });
 
+const PotWithdrawMoney = z.object({
+  amountToWithdraw: z
+    .number()
+    .gte(1, { message: "Your Pot must be $1 or higher!" })
+    .lte(1000000000000, {
+      message: "Your pot target must be 1 trillion or lower!",
+    }),
+});
+
 export async function addNewPotAction(prevState: unknown, formData: FormData) {
   const supabase = await createClient();
   const {
@@ -225,7 +234,10 @@ export async function deletePotAction(prevState: unknown, formData: FormData) {
   };
 }
 
-export async function addMoneyToPotAction(prevState: unknown, formData) {
+export async function addMoneyToPotAction(
+  prevState: unknown,
+  formData: FormData,
+) {
   const supabase = await createClient();
 
   const {
@@ -288,7 +300,7 @@ export async function addMoneyToPotAction(prevState: unknown, formData) {
     .from("pots")
     .select("potCurrentBalance")
     .eq("userId", user?.id)
-    .eq("id", potToAddMoneyId);
+    .eq("id", potToAddMoneyId as string);
 
   // Adding money
   const { error: AddMoneyError } = await supabase
@@ -299,7 +311,7 @@ export async function addMoneyToPotAction(prevState: unknown, formData) {
         potsValidatedInput?.amountToAdd,
     })
     .eq("userId", user?.id)
-    .eq("id", potToAddMoneyId);
+    .eq("id", potToAddMoneyId as string);
 
   if (AddMoneyError) {
     return {
@@ -313,5 +325,98 @@ export async function addMoneyToPotAction(prevState: unknown, formData) {
   return {
     success: true,
     message: `$${potsValidatedInput?.amountToAdd} successfully added to pot "${potToAddMoneyName}"`,
+  };
+}
+
+export async function potWithdrawalAction(
+  prevState: unknown,
+  formData: FormData,
+) {
+  const supabase = await createClient();
+
+  // Checking if user is logged in
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return {
+      success: false,
+      message: "You need to be signed to call this action!",
+    };
+  }
+
+  // Checking if pot to withraw belong to user
+  const potToWithdrawId = formData.get("potId");
+  const potToWithdrawName = formData.get("potName");
+  const { data: usersPots, error } = await supabase
+    .from("pots")
+    .select("*")
+    .eq("userId", user?.id);
+
+  if (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+
+  const doesPotBelongToUser = usersPots?.some(
+    (pot) => pot?.id === potToWithdrawId,
+  );
+
+  if (!doesPotBelongToUser) {
+    return {
+      success: false,
+      message: "You are not authorized to withdraw from this pot!",
+    };
+  }
+
+  // build the data and ensuare type safety
+  const potInputs = {
+    amountToWithdraw: Number(formData.get("amountToWithdraw")),
+  };
+  const {
+    data: validatedPotData,
+    success: isValidationSuccessful,
+    error: validationError,
+  } = PotWithdrawMoney.safeParse(potInputs);
+
+  if (!isValidationSuccessful) {
+    return {
+      errors: validationError?.flatten()?.fieldErrors,
+      inputs: potInputs,
+    };
+  }
+
+  // mutating
+  const { data: potToWithdraw } = await supabase
+    .from("pots")
+    .select("potCurrentBalance")
+    .eq("userId", user?.id)
+    .eq("id", potToWithdrawId as string);
+
+  const { error: potWithdrawError } = await supabase
+    .from("pots")
+    .update({
+      potCurrentBalance: potToWithdraw?.at(0)?.potCurrentBalance
+        ? (potToWithdraw?.at(0)?.potCurrentBalance ?? 0) -
+          validatedPotData?.amountToWithdraw
+        : 0,
+    })
+    .eq("userId", user?.id)
+    .eq("id", potToWithdrawId as string);
+
+  if (potWithdrawError) {
+    return {
+      success: false,
+      message: potWithdrawError?.message,
+    };
+  }
+
+  revalidatePath("/");
+
+  return {
+    success: true,
+    message: `$${validatedPotData?.amountToWithdraw} successfully withdrawn from pot "${potToWithdrawName}"`,
   };
 }

@@ -1,6 +1,9 @@
 "use client";
 
-import { onUpdateAddMoneyModalOpening } from "@/app/_lib/redux/potsSlice";
+import {
+  onUpdateAddMoneyModalOpening,
+  onUpdateWithdrawMoneyModalOpening,
+} from "@/app/_lib/redux/potsSlice";
 import { useDispatch } from "react-redux";
 
 type ButtonsProps = {
@@ -19,6 +22,18 @@ export default function PotCardButtons({ potId, potName }: ButtonsProps) {
     }
   }
 
+  function onWithdrawMoney() {
+    if (potId && potName) {
+      dispatch(
+        onUpdateWithdrawMoneyModalOpening({
+          modalOpen: true,
+          potId,
+          potName,
+        }),
+      );
+    }
+  }
+
   return (
     <div className="flex items-center gap-4">
       <button
@@ -29,7 +44,10 @@ export default function PotCardButtons({ potId, potName }: ButtonsProps) {
         + add money
       </button>
 
-      <button className="btn-secondary w-full cursor-pointer justify-center capitalize">
+      <button
+        onClick={onWithdrawMoney}
+        className="btn-secondary withdraw-money-btn w-full cursor-pointer justify-center capitalize"
+      >
         {" "}
         withdraw
       </button>

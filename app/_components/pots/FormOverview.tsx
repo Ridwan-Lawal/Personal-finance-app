@@ -28,6 +28,8 @@ export default function FormOverview({
     queryFn: () => getPots(),
   });
 
+  console.log(amountToWithdraw, "jfaljfaljlajfkaj");
+
   const potToAddorWithdrawMoneyData = pots
     ?.filter((pot) => pot?.id === potToAddorWithdrawMoney?.potId)
     ?.at(0);
@@ -45,6 +47,10 @@ export default function FormOverview({
       (potToAddorWithdrawMoneyData?.potTarget ?? 0)) *
     100;
 
+  const totalSavedPlusAmountToAddOrWithdraw =
+    (potToAddorWithdrawMoneyData?.potCurrentBalance ?? 0) +
+    (amountToaddOrWidthraw ?? 0);
+
   console.log(percentageOfTotalSavedToTarget, totalSaved);
   return (
     <div className="space-y-4">
@@ -53,8 +59,9 @@ export default function FormOverview({
 
         <p className="text-preset-1 text-grey-900">
           $
-          {(potToAddorWithdrawMoneyData?.potCurrentBalance ?? 0) +
-            (amountToaddOrWidthraw ?? 0)}
+          {totalSavedPlusAmountToAddOrWithdraw < 0
+            ? 0
+            : totalSavedPlusAmountToAddOrWithdraw}
         </p>
       </div>
 
@@ -66,7 +73,9 @@ export default function FormOverview({
 
       <div className="flex items-center justify-between">
         <p className={`text-preset-5-bold ${potTheme?.text}`}>
-          {percentageOfTotalSavedToTarget.toFixed(2)}%
+          {percentageOfTotalSavedToTarget < 0
+            ? "0%"
+            : `${percentageOfTotalSavedToTarget.toFixed(2)}%`}
         </p>
 
         <p className="text-grey-500 text-preset-5">

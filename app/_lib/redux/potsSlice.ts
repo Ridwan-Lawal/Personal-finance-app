@@ -15,6 +15,11 @@ const initialState = {
     potId: "",
     potName: "",
   },
+  isWithdrawMoneyModalOpen: false,
+  potToWithdrawMoney: {
+    potId: "",
+    potName: "",
+  },
 };
 
 const potsSlice = createSlice({
@@ -40,6 +45,12 @@ const potsSlice = createSlice({
       state.potToAddMoney.potId = action?.payload?.potId;
       state.potToAddMoney.potName = action?.payload?.potName;
     },
+
+    onUpdateWithdrawMoneyModalOpening(state, action) {
+      state.isWithdrawMoneyModalOpen = action?.payload?.modalOpen;
+      state.potToWithdrawMoney.potId = action?.payload?.potId;
+      state.potToWithdrawMoney.potName = action?.payload?.potName;
+    },
   },
 });
 
@@ -48,6 +59,7 @@ export const {
   onUpdateEditPotModalOpening,
   onUpdateDeletePotModalOpening,
   onUpdateAddMoneyModalOpening,
+  onUpdateWithdrawMoneyModalOpening,
 } = potsSlice.actions;
 
 export default potsSlice.reducer;
