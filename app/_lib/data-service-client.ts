@@ -53,7 +53,7 @@ export async function getBudgetByCategory(category: string) {
 
 // -=--------=========== POTS ======
 
-export async function getPots() {
+export const getPots = cache(async function () {
   const supabase = await createClient();
 
   const {
@@ -73,7 +73,7 @@ export async function getPots() {
   }
 
   return pots;
-}
+});
 
 export async function getPotById(id: string) {
   const supabase = createClient();

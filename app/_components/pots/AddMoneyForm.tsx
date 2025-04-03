@@ -142,7 +142,7 @@ export default function AddMoneyForm() {
                   aria-disabled={isAddingMoney}
                   aria-describedby="amountToAdd-error"
                   aria-invalid={!!errors?.amountToAdd}
-                  min={5}
+                  min={1}
                 />
               </PotsFormInput>
 
@@ -164,7 +164,7 @@ export default function AddMoneyForm() {
   );
 }
 
-// continue from the withdraw money modal
+// Test everything to see if it's working
 
 // first make sure all the modals are working as they should before abstracting and creating custom hook
 
