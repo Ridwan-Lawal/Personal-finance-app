@@ -230,7 +230,7 @@ export async function deletePotAction(prevState: unknown, formData: FormData) {
 
   return {
     success: true,
-    message: `Pot ${(potToDeleteName as string).toLowerCase()} successfully deleted!`,
+    message: `Pot "${potToDeleteName}" successfully deleted!`,
   };
 }
 

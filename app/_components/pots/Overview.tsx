@@ -31,7 +31,7 @@ export default function Overview({
 
       <div className="flex items-center justify-between">
         <p className="text-preset-5-bold text-grey-500">
-          {percentageOfTotalSavedToTarget}%
+          {percentageOfTotalSavedToTarget.toFixed(2)}%
         </p>
 
         <p className="text-grey-500 text-preset-5">Target of ${potTarget}</p>

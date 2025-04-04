@@ -3,6 +3,7 @@
 import BudgetCategory from "@/app/_components/budgets/BudgetCategory";
 import BudgetColor from "@/app/_components/budgets/BudgetColor";
 import BudgetFormInput from "@/app/_components/budgets/BudgetFormInput";
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { editBudgetAction } from "@/app/_lib/actions/dashboardActions";
 import { getBudgets } from "@/app/_lib/data-service-client";
 import {
@@ -13,7 +14,7 @@ import cancelIcon from "@/public/icon-close-modal.svg";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { Suspense, useActionState, useEffect } from "react";
+import { Suspense, useActionState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -42,31 +43,24 @@ export default function BudgetEditForm() {
   );
 
   // Effect for closing modal when you click outside it
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
+  const onCloseModal = useCallback(
+    () => dispatch(onUpdateEditModalOpening(false)),
+    [dispatch],
+  );
 
-      if (!target.closest(".form-block") && !target.closest(".edit-option")) {
-        dispatch(onUpdateEditModalOpening(false));
-      }
-    }
-
-    window.addEventListener("click", onBlurModal);
-
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".edit-option ", isEditModalOpen);
 
   // Effect for displaying toast notification when updating budgets
   useEffect(() => {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-        dispatch(onUpdateEditModalOpening(false));
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>

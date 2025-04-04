@@ -3,6 +3,7 @@
 import BudgetCategory from "@/app/_components/budgets/BudgetCategory";
 import BudgetColor from "@/app/_components/budgets/BudgetColor";
 import BudgetFormInput from "@/app/_components/budgets/BudgetFormInput";
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { addBudgetAction } from "@/app/_lib/actions/dashboardActions";
 import {
   getBudgetSliceReducer,
@@ -11,7 +12,7 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { Suspense, useActionState, useEffect } from "react";
+import { Suspense, useActionState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,32 +27,23 @@ export default function BudgetAddForm() {
   const { isModalOpen } = useSelector(getBudgetSliceReducer);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
-      if (
-        !target.closest(".form-block") &&
-        !target.closest(".btn-add-budget")
-      ) {
-        dispatch(onUpdateModalOpening(false));
-      }
-    }
+  const onCloseModal = useCallback(
+    () => dispatch(onUpdateModalOpening(false)),
+    [dispatch],
+  );
 
-    window.addEventListener("click", onBlurModal);
-
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".btn-add-budget", isModalOpen);
 
   useEffect(() => {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-        dispatch(onUpdateModalOpening(false));
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>

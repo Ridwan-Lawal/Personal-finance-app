@@ -2,6 +2,7 @@
 
 import PotColor from "@/app/_components/pots/PotColor";
 import PotsFormInput from "@/app/_components/pots/PotsFormInput";
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { addNewPotAction } from "@/app/_lib/actions/potActions";
 import {
   getPotsSliceReducer,
@@ -10,7 +11,7 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { Suspense, useActionState, useEffect } from "react";
+import { Suspense, useActionState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -27,29 +28,23 @@ export default function AddNewPotForm() {
   const { isAddNewPotModalOpen } = useSelector(getPotsSliceReducer);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".form-block") && !target.closest(".btn-add-pot")) {
-        dispatch(onUpdateAddPotModalOpening(false));
-      }
-    }
+  const onCloseModal = useCallback(
+    () => dispatch(onUpdateAddPotModalOpening(false)),
+    [dispatch],
+  );
 
-    window.addEventListener("click", onBlurModal);
-
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".btn-add-pot", isAddNewPotModalOpen);
 
   useEffect(() => {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-        dispatch(onUpdateAddPotModalOpening(false));
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>
