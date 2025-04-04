@@ -1,5 +1,6 @@
 "use client";
 
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { deletePotAction } from "@/app/_lib/actions/potActions";
 import {
   getPotsSliceReducer,
@@ -8,7 +9,7 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useActionState, useEffect } from "react";
+import { useActionState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,25 +26,20 @@ export default function PotDeleteModal() {
   console.log(isDeletePotModalOpen, "delete moddalll");
 
   // Effect to remove modal when mouse click outside the modal
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".form-block") && !target.closest(".delete-option")) {
-        console.log("hey");
-        dispatch(
-          onUpdateDeletePotModalOpening({
-            modalOpen: false,
-            potName: "",
-            potId: "",
-          }),
-        );
-      }
-    }
 
-    window.addEventListener("click", onBlurModal);
+  const onCloseModal = useCallback(
+    () =>
+      dispatch(
+        onUpdateDeletePotModalOpening({
+          modalOpen: false,
+          potName: "",
+          potId: "",
+        }),
+      ),
+    [dispatch],
+  );
 
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".delete-option", isDeletePotModalOpen);
 
   //Effect to display toast notification upon deleting a budget
 
@@ -51,19 +47,12 @@ export default function PotDeleteModal() {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-
-        dispatch(
-          onUpdateDeletePotModalOpening({
-            modalOpen: false,
-            potName: "",
-            potId: "",
-          }),
-        );
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>

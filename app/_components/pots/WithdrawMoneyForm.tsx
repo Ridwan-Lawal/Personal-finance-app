@@ -2,6 +2,7 @@
 
 import FormOverview from "@/app/_components/pots/FormOverview";
 import PotsFormInput from "@/app/_components/pots/PotsFormInput";
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { potWithdrawalAction } from "@/app/_lib/actions/potActions";
 import { getPots } from "@/app/_lib/data-service-client";
 import {
@@ -12,7 +13,7 @@ import cancelIcon from "@/public/icon-close-modal.svg";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -40,44 +41,30 @@ export default function WithdrawMoneyForm() {
     potToWithdraw?.potCurrentBalance &&
     amountToWithdraw > potToWithdraw?.potCurrentBalance;
 
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
-      if (
-        !target.closest(".form-block") &&
-        !target.closest(".withdraw-money-btn")
-      ) {
-        dispatch(
-          onUpdateWithdrawMoneyModalOpening({
-            modalOpen: false,
-            potId: "",
-            potName: "",
-          }),
-        );
-      }
-    }
+  const onCloseModal = useCallback(
+    () =>
+      dispatch(
+        onUpdateWithdrawMoneyModalOpening({
+          modalOpen: false,
+          potId: "",
+          potName: "",
+        }),
+      ),
+    [dispatch],
+  );
 
-    window.addEventListener("click", onBlurModal);
-
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".withdraw-money-btn", isWithdrawMoneyModalOpen);
 
   useEffect(() => {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-        dispatch(
-          onUpdateWithdrawMoneyModalOpening({
-            modalOpen: false,
-            potId: "",
-            potName: "",
-          }),
-        );
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>

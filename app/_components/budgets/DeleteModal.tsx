@@ -1,5 +1,6 @@
 "use client";
 
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { deleteBudgetAction } from "@/app/_lib/actions/dashboardActions";
 import {
   getBudgetSliceReducer,
@@ -8,7 +9,7 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useActionState, useEffect } from "react";
+import { useActionState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,18 +27,13 @@ export default function DeleteModal() {
   const dispatch = useDispatch();
 
   // Effect to remove modal when mouse click outside the modal
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".form-block") && !target.closest(".delete-option")) {
-        dispatch(onUpdateDeleteModalOpening(false));
-      }
-    }
 
-    window.addEventListener("click", onBlurModal);
+  const onCloseModal = useCallback(
+    () => dispatch(onUpdateDeleteModalOpening(false)),
+    [dispatch],
+  );
 
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".delete-option", isDeleteModalOpen);
 
   //Effect to display toast notification upon deleting a budget
 
@@ -45,13 +41,12 @@ export default function DeleteModal() {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-
-        dispatch(onUpdateDeleteModalOpening(false));
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>

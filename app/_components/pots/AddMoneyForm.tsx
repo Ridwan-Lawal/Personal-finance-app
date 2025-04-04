@@ -2,6 +2,7 @@
 
 import FormOverview from "@/app/_components/pots/FormOverview";
 import PotsFormInput from "@/app/_components/pots/PotsFormInput";
+import { useModalBlur } from "@/app/_hooks/useModalBlur";
 import { addMoneyToPotAction } from "@/app/_lib/actions/potActions";
 import {
   getPotsSliceReducer,
@@ -10,7 +11,7 @@ import {
 import cancelIcon from "@/public/icon-close-modal.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -27,41 +28,30 @@ export default function AddMoneyForm() {
 
   const [amountToAdd, setAmountToAdd] = useState(5);
 
-  useEffect(() => {
-    function onBlurModal(e: Event) {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".form-block") && !target.closest(".add-money-btn")) {
-        dispatch(
-          onUpdateAddMoneyModalOpening({
-            modalOpen: false,
-            potId: "",
-            potName: "",
-          }),
-        );
-      }
-    }
+  const onCloseModal = useCallback(
+    () =>
+      dispatch(
+        onUpdateAddMoneyModalOpening({
+          modalOpen: false,
+          potId: "",
+          potName: "",
+        }),
+      ),
+    [dispatch],
+  );
 
-    window.addEventListener("click", onBlurModal);
-
-    return () => window.removeEventListener("click", onBlurModal);
-  }, [dispatch]);
+  useModalBlur(onCloseModal, ".add-money-btn", isAddMoneyModalOpen);
 
   useEffect(() => {
     if (state) {
       if (state?.success) {
         toast.success(state?.message);
-        dispatch(
-          onUpdateAddMoneyModalOpening({
-            modalOpen: false,
-            potId: "",
-            potName: "",
-          }),
-        );
+        onCloseModal();
       } else if (state?.success === false) {
         toast.error(state?.message);
       }
     }
-  }, [state, dispatch]);
+  }, [state, onCloseModal]);
 
   return (
     <AnimatePresence>
@@ -163,8 +153,6 @@ export default function AddMoneyForm() {
     </AnimatePresence>
   );
 }
-
-// Test everything to see if it's working
 
 // first make sure all the modals are working as they should before abstracting and creating custom hook
 
