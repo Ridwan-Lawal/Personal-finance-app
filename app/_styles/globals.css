@@ -156,6 +156,12 @@ body {
   .dropdown {
     @apply absolute w-full space-y-3 rounded-lg border bg-white px-5 py-3 shadow-md;
   }
+
+  /* recurring bills */
+
+  .total-bills {
+    @apply bg-grey-900 flex items-center gap-5 rounded-xl px-5 py-6 md:flex-col md:items-start md:justify-between md:gap-8 md:px-6 md:py-8;
+  }
 }
 @layer utilities {
 }
