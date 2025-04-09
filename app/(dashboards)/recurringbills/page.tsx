@@ -4,6 +4,7 @@ import Overview from "@/app/_components/recurringbills/Overview";
 import SearchForm from "@/app/_components/recurringbills/SearchForm";
 import Sortbar from "@/app/_components/recurringbills/Sortbar";
 import { Metadata } from "@/app/_lib/metadata";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Recurring bills",
@@ -16,7 +17,9 @@ export default function Page() {
         recurring bills
       </h1>
       <div className="flex flex-col gap-6 lg:flex-row">
-        <Overview />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Overview />
+        </Suspense>
 
         {/* recurring bills */}
         <div className="space-y-6 rounded-[12px] bg-white px-5 py-6 md:px-8 md:py-8 lg:w-[64%]">
@@ -27,7 +30,10 @@ export default function Page() {
           </div>
 
           <Heading />
-          <Bills />
+
+          <Suspense fallback={<div>Loading...</div>}>
+            <Bills />
+          </Suspense>
         </div>
       </div>
     </div>

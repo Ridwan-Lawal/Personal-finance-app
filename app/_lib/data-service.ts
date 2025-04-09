@@ -191,3 +191,75 @@ export async function getPots() {
 
   return pots;
 }
+
+export const getRecurringTransactions = cache(async function () {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error("You need to be signed in to call this data!");
+  }
+
+  const { data: recurringTransactions, error } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("userId", user?.id)
+    .eq("recurring", true);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // Getting latest transaction
+  const { data: latestTransaction, error: latestTransactionError } =
+    await supabase
+      .from("transactions")
+      .select("created_at")
+      .eq("userId", user?.id)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+  if (latestTransactionError) {
+    throw new Error(latestTransactionError.message);
+  }
+
+  // latest transaction day
+  const latestTransactionDate = new Date(
+    latestTransaction?.at(0)?.created_at ?? "",
+  ).getDate();
+
+  const today = new Date().getDate();
+
+  // if the transaction date is less than today paid is true else false
+  const transactionsWithPaidStatus = recurringTransactions?.map(
+    (transaction) => ({
+      ...transaction,
+      paid: new Date(transaction?.date ?? "").getDate() < today,
+    }),
+  );
+
+  const transactionsAlreadyPaid = transactionsWithPaidStatus.filter(
+    (transaction) => transaction?.paid,
+  );
+
+  // transaction not paid, and transactions not paid and due in 5 days
+  const transactionNotPaid = transactionsWithPaidStatus
+    .filter((transaction) => !transaction?.paid)
+    .map((transaction) => ({
+      ...transaction,
+      dueSoon:
+        new Date(transaction?.date ?? "").getDate() > latestTransactionDate &&
+        new Date(transaction?.date ?? "").getDate() <=
+          latestTransactionDate + 5,
+    }));
+
+  console.log(
+    recurringTransactions,
+    transactionsAlreadyPaid,
+    transactionNotPaid,
+    "yesss",
+  );
+
+  return [...transactionsAlreadyPaid, ...transactionNotPaid];
+});

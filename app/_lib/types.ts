@@ -27,3 +27,17 @@ export interface ActionState {
       }
     | null;
 }
+
+export type RecurringTransactions = {
+  paid: boolean;
+  amount: number | null;
+  avatar: string | null;
+  category: string | null;
+  created_at: string;
+  date: string | null;
+  id: string;
+  name: string | null;
+  recurring: boolean | null;
+  userId: string | null;
+  dueSoon: boolean;
+}[];
