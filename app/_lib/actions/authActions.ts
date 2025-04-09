@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/app/_lib/supabase/server";
+import { transactions as transactionsData } from "@/app/_lib/transactions.json";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -78,7 +79,7 @@ export async function signupAction(prevState: unknown, formData: FormData) {
 
     // step 4. sign up mutation
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: userValidatedCredentials?.email,
       password: userValidatedCredentials?.password,
       options: {
@@ -90,6 +91,24 @@ export async function signupAction(prevState: unknown, formData: FormData) {
 
     if (error) {
       throw new Error(error.message);
+    }
+
+    // add Demo transactions for user
+    const { error: transactionsAddError } = await supabase
+      .from("transactions")
+      .insert(
+        transactionsData?.map((transactionData) => ({
+          ...transactionData,
+          userId: data?.user?.id,
+        })),
+      )
+      .select();
+
+    if (transactionsAddError) {
+      return {
+        success: false,
+        message: `Transaction could'nt be added - ${transactionsAddError?.message}`,
+      };
     }
 
     revalidatePath("/user");

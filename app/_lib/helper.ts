@@ -1,5 +1,6 @@
 import { COLORS } from "@/app/_lib/constant";
 import { budgets, transactions } from "@/app/_lib/supabase/server";
+import { RecurringTransactions } from "@/app/_lib/types";
 
 export function formatDate(date: string) {
   const createdDate = new Date(date);
@@ -53,3 +54,61 @@ export function totalSpentForEachBudget(
 
   return totalSpentForEachCategory;
 }
+
+export function addDateWithSuffixes(transactionDate: string | null) {
+  if (transactionDate) {
+    const date = new Date(transactionDate).getDate();
+
+    const lastDigit = date.toString().slice(-1);
+
+    // if the date is from 11th to 20th
+    if (date > 10 && date <= 20) {
+      return `${date}st`;
+    }
+
+    switch (lastDigit) {
+      case "1":
+        return `${date}st`;
+        break;
+      case "2":
+        return `${date}nd`;
+        break;
+      case "3":
+        return `${date}rd`;
+        break;
+
+      default:
+        return `${date}th`;
+        break;
+    }
+  }
+}
+
+export function getBillLength(
+  summaryType: string,
+  recurringTransactions: RecurringTransactions,
+) {
+  switch (summaryType) {
+    case "paid-bills":
+      return recurringTransactions?.filter((transaction) => transaction?.paid)
+        .length;
+      break;
+
+    case "total-upcoming":
+      return recurringTransactions?.filter((transaction) => !transaction?.paid)
+        .length;
+      break;
+
+    case "due-soon":
+      return recurringTransactions?.filter(
+        (transaction) => !transaction?.paid && transaction?.dueSoon,
+      ).length;
+      break;
+
+    default:
+      return 0;
+      break;
+  }
+}
+
+// start building the search and sort functionality
