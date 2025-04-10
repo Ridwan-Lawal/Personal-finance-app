@@ -5,15 +5,46 @@ import chevronDown from "@/public/icon-caret-down.svg";
 import sortIcon from "@/public/icon-sort-mobile.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Sortbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const onDropdown = () => setIsDropdownOpen((cur) => !cur);
 
+  function onSelectSortType(sortType: string) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!sortType) {
+      params.delete("sortBy");
+    } else {
+      params.set("sortBy", sortType);
+    }
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
+  //   if a click is detected outside the modal, close modal
+  useEffect(() => {
+    function onBlurSortModal(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+
+      if (!target.closest(".sort-modal")) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("click", onBlurSortModal);
+
+    return () => document.removeEventListener("click", onBlurSortModal);
+  }, []);
+
   return (
-    <div className="relative flex flex-col">
+    <div className="sort-modal relative flex flex-col">
       <div className="self-end">
         <button className="cursor-pointer md:hidden" onClick={onDropdown}>
           <Image src={sortIcon} alt="sort" priority={true} />
@@ -47,8 +78,9 @@ export default function Sortbar() {
           >
             {sort?.options?.map((sortType, index, arr) => (
               <li
-                className={`text-preset-4 text-grey-900 flex flex-col gap-3 capitalize`}
+                className={`text-preset-4 text-grey-900 flex cursor-pointer flex-col gap-3 capitalize`}
                 key={sortType}
+                onClick={() => onSelectSortType(sortType)}
               >
                 <span> {sortType}</span>
 

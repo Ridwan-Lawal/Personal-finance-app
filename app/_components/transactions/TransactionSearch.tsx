@@ -16,7 +16,6 @@ export default function TransactionSearch() {
   );
 
   function onSearchTransaction(prompt: string) {
-    console.log(prompt, "prommtttttttttttttttttttttttttttttt");
     const params = new URLSearchParams(searchParams.toString());
     console.log(prompt, "prommtttt");
     if (!prompt) {
