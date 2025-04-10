@@ -134,7 +134,7 @@ export const getBudgets = cache(async function () {
   if (error) {
     throw new Error(error.message);
   }
-
+  console.log(budgets, "jlfjaflsj");
   return budgets;
 });
 
@@ -192,7 +192,9 @@ export async function getPots() {
   return pots;
 }
 
-export const getRecurringTransactions = cache(async function () {
+export const getRecurringTransactions = cache(async function (params?: {
+  [k: string]: string;
+}) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -201,11 +203,17 @@ export const getRecurringTransactions = cache(async function () {
     throw new Error("You need to be signed in to call this data!");
   }
 
-  const { data: recurringTransactions, error } = await supabase
+  let query = supabase
     .from("transactions")
     .select("*")
     .eq("userId", user?.id)
     .eq("recurring", true);
+
+  if (params?.search) {
+    query = query.ilike("name", `%${params?.search}%`);
+  }
+
+  const { data: recurringTransactions, error } = await query;
 
   if (error) {
     throw new Error(error.message);
@@ -254,12 +262,7 @@ export const getRecurringTransactions = cache(async function () {
           latestTransactionDate + 5,
     }));
 
-  console.log(
-    recurringTransactions,
-    transactionsAlreadyPaid,
-    transactionNotPaid,
-    "yesss",
-  );
-
   return [...transactionsAlreadyPaid, ...transactionNotPaid];
 });
+
+// handle the sorting in the client, create an helper for it

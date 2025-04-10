@@ -10,7 +10,15 @@ export const metadata: Metadata = {
   title: "Recurring bills",
 };
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [k: string]: string }>;
+}) {
+  const params = await searchParams;
+
+  const suspenseKey = `${params?.search}-${params?.sortBy}`;
+
   return (
     <div className="space-y-8 px-4 py-6 md:px-10 md:py-8">
       <h1 className="text-preset-1 text-grey-900 capitalize">
@@ -31,8 +39,8 @@ export default function Page() {
 
           <Heading />
 
-          <Suspense fallback={<div>Loading...</div>}>
-            <Bills />
+          <Suspense fallback={<div>Loading...</div>} key={suspenseKey}>
+            <Bills params={params} />
           </Suspense>
         </div>
       </div>
