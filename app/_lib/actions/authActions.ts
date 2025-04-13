@@ -1,5 +1,6 @@
 "use server";
 
+import { balance } from "@/app/_lib/balance.json";
 import { createClient } from "@/app/_lib/supabase/server";
 import { transactions as transactionsData } from "@/app/_lib/transactions.json";
 import { revalidatePath } from "next/cache";
@@ -91,6 +92,22 @@ export async function signupAction(prevState: unknown, formData: FormData) {
 
     if (error) {
       throw new Error(error.message);
+    }
+
+    // Add Demo balances
+
+    const { data: balanceData, error: balanceError } = await supabase
+      .from("balance")
+      .insert([{ ...balance, userId: data?.user?.id }])
+      .select();
+
+    console.log(balanceData, balanceError, "eyyyyyyy");
+
+    if (balanceError) {
+      return {
+        success: false,
+        message: `Balances couldn't be created - ${balanceError?.message}`,
+      };
     }
 
     // add Demo transactions for user

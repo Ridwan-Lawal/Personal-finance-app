@@ -2,7 +2,7 @@
 
 import { useDropdown } from "@/app/_hooks/useDropdown";
 import { COLORS } from "@/app/_lib/constant";
-import { getBudgets } from "@/app/_lib/data-service-client";
+import { getPots } from "@/app/_lib/data-service-client";
 import chevronDown from "@/public/icon-caret-down.svg";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -17,11 +17,11 @@ export default function PotColor({
 }) {
   const { data: pots } = useSuspenseQuery({
     queryKey: ["pots"],
-    queryFn: () => getBudgets(),
+    queryFn: () => getPots(),
   });
 
   // The colors that have been used to create a budget
-  const colorTagsUsed = pots?.map((budget) => budget?.colorTag);
+  const colorTagsUsed = pots?.map((budget) => budget?.potTheme);
 
   // default color when you click on edit form
   const colorToEdit = COLORS?.filter(

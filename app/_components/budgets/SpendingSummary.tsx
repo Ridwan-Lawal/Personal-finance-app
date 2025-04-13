@@ -42,13 +42,23 @@ export default async function SpendingSummary() {
   }));
 
   return (
-    <div className="flex w-full flex-grow flex-col items-center gap-8 rounded-[12px] border bg-white px-5 py-6 md:flex-row md:justify-center md:px-8 md:py-8 lg:w-[42%] lg:flex-col">
-      <ChartsSummary
-        budgets={budgets}
-        chartData={chartData}
-        chartConfig={chartConfig}
-      />
-      <CategorySpendingSummary spendingSummary={spendingSummary} />
+    <div>
+      {budgets?.length ? (
+        <div className="flex w-full flex-grow flex-col items-center gap-8 rounded-[12px] border bg-white px-5 py-6 md:flex-row md:justify-center md:px-8 md:py-8 lg:w-[42%] lg:flex-col">
+          <ChartsSummary
+            budgets={budgets}
+            chartData={chartData}
+            chartConfig={chartConfig}
+          />
+          <CategorySpendingSummary spendingSummary={spendingSummary} />
+        </div>
+      ) : (
+        <div className="mt-4 flex h-[120px] items-center justify-center rounded-xl">
+          <p className="text-grey-900 text-lg font-medium">
+            Add new budgets to get started.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
