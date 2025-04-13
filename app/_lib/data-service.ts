@@ -134,7 +134,7 @@ export const getBudgets = cache(async function () {
   if (error) {
     throw new Error(error.message);
   }
-  console.log(budgets, "jlfjaflsj");
+
   return budgets;
 });
 
@@ -170,7 +170,7 @@ export const getTransactionByCategory = cache(async function (
 
 // ================ POTS ==========
 
-export async function getPots() {
+export const getPots = cache(async function () {
   const supabase = await createClient();
 
   const {
@@ -190,7 +190,7 @@ export async function getPots() {
   }
 
   return pots;
-}
+});
 
 export const getRecurringTransactions = cache(async function (params?: {
   [k: string]: string;
@@ -266,3 +266,51 @@ export const getRecurringTransactions = cache(async function (params?: {
 });
 
 // handle the sorting in the client, create an helper for it
+export const overviewTransactions = cache(async function () {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error("You need to be signed in to fetch the transactions!");
+  }
+
+  const { data: transactions, error } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("userId", user?.id)
+    .order("date", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return transactions;
+});
+
+export async function getBalances() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You need to be signed in to fetch this data!");
+  }
+
+  // Getting balances.
+  const { data: balances, error } = await supabase
+    .from("balance")
+    .select("*")
+    .eq("userId", user?.id);
+
+  if (error?.message) {
+    throw new Error(`Balances could not be fetched! - ${error?.message}`);
+  }
+
+  console.log(balances, "yesssbalance", user?.id);
+
+  return balances;
+}

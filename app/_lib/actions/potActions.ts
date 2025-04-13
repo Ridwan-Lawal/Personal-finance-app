@@ -94,6 +94,7 @@ export async function addNewPotAction(prevState: unknown, formData: FormData) {
   }
 
   revalidatePath("/pots");
+  revalidatePath("/");
 
   return {
     success: true,
@@ -165,6 +166,7 @@ export async function editPotAction(prevState: unknown, formData: FormData) {
   }
 
   revalidatePath("/pots");
+  revalidatePath("/");
 
   return {
     success: true,
@@ -213,6 +215,12 @@ export async function deletePotAction(prevState: unknown, formData: FormData) {
     };
   }
 
+  const { data: potToDeleteData } = await supabase
+    .from("pots")
+    .select("potCurrentBalance")
+    .eq("userId", user?.id)
+    .eq("id", potToDeleteId as string);
+
   const { error: deleteError } = await supabase
     .from("pots")
     .delete()
@@ -226,7 +234,35 @@ export async function deletePotAction(prevState: unknown, formData: FormData) {
     };
   }
 
+  // Getting the user current balance
+
+  const { data: userBalances } = await supabase
+    .from("balance")
+    .select("current,expenses")
+    .eq("userId", user?.id);
+
+  // Deducting the amount from the balance
+  const { error: AddToBalanceError } = await supabase
+    .from("balance")
+    .update({
+      current:
+        (userBalances?.at(0)?.current ?? 0) +
+        (potToDeleteData?.at(0)?.potCurrentBalance ?? 0),
+      expenses:
+        (userBalances?.at(0)?.expenses ?? 0) -
+        (potToDeleteData?.at(0)?.potCurrentBalance ?? 0),
+    })
+    .eq("userId", user?.id);
+
+  if (AddToBalanceError) {
+    return {
+      success: true,
+      message: `Cash was not added to your balance - ${AddToBalanceError?.message}`,
+    };
+  }
+
   revalidatePath("/pots");
+  revalidatePath("/");
 
   return {
     success: true,
@@ -320,7 +356,33 @@ export async function addMoneyToPotAction(
     };
   }
 
+  // Getting the user current balance
+
+  const { data: userBalances } = await supabase
+    .from("balance")
+    .select("current,expenses")
+    .eq("userId", user?.id);
+
+  // Deducting the amount from the balance
+  const { error: deductBalanceError } = await supabase
+    .from("balance")
+    .update({
+      current:
+        (userBalances?.at(0)?.current ?? 0) - potsValidatedInput?.amountToAdd,
+      expenses:
+        (userBalances?.at(0)?.expenses ?? 0) + potsValidatedInput?.amountToAdd,
+    })
+    .eq("userId", user?.id);
+
+  if (deductBalanceError) {
+    return {
+      success: true,
+      message: `Balance was not deducted - ${deductBalanceError?.message}`,
+    };
+  }
+
   revalidatePath("/pots");
+  revalidatePath("/");
 
   return {
     success: true,
@@ -413,6 +475,34 @@ export async function potWithdrawalAction(
     };
   }
 
+  // Getting the user current balance
+
+  const { data: userBalances } = await supabase
+    .from("balance")
+    .select("current,expenses")
+    .eq("userId", user?.id);
+
+  // Deducting the amount from the balance
+  const { error: AddToBalanceError } = await supabase
+    .from("balance")
+    .update({
+      current:
+        (userBalances?.at(0)?.current ?? 0) +
+        validatedPotData?.amountToWithdraw,
+      expenses:
+        (userBalances?.at(0)?.expenses ?? 0) -
+        validatedPotData?.amountToWithdraw,
+    })
+    .eq("userId", user?.id);
+
+  if (AddToBalanceError) {
+    return {
+      success: true,
+      message: `Cash was not added to your balance - ${AddToBalanceError?.message}`,
+    };
+  }
+
+  revalidatePath("/pots");
   revalidatePath("/");
 
   return {

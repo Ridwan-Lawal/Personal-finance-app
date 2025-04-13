@@ -80,6 +80,7 @@ export async function addBudgetAction(prevState: unknown, formData: FormData) {
     };
   }
 
+  revalidatePath("/");
   revalidatePath("/budgets");
 
   return {
@@ -161,6 +162,7 @@ export async function editBudgetAction(prevState: unknown, formData: FormData) {
     };
   }
 
+  revalidatePath("/");
   revalidatePath("/budgets");
 
   return {
@@ -222,6 +224,7 @@ export async function deleteBudgetAction(
     };
   }
 
+  revalidatePath("/");
   revalidatePath("/budgets");
 
   return {

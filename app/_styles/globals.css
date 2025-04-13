@@ -164,6 +164,30 @@ body {
   }
 }
 @layer utilities {
-}
+  @media screen and (min-width: 64rem) {
+    .overviews {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "pots-overview budgets-overview"
+        "transactions-overview budgets-overview"
+        "transactions-overview recurring-bills-overview";
+      gap: 32px;
+    }
+    .pots-overview {
+      grid-area: pots-overview;
+    }
 
-/* start building the authentication part */
+    .budgets-overview {
+      grid-area: budgets-overview;
+    }
+
+    .recurring-bills-overview {
+      grid-area: recurring-bills-overview;
+    }
+    .transactions-overview {
+      grid-area: transactions-overview;
+    }
+  }
+}

@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 
 import {
   BudgetsIcon,
@@ -14,8 +13,9 @@ import NavIcon from "@/app/_ui/NavIcon";
 import logo from "@/public/logo-large.svg";
 import Image from "next/image";
 
-import logoSmall from "@/public/logo-small.svg";
+import SignoutButton from "@/app/_components/authentication/SignoutButton";
 import { useMinimizeMenu } from "@/app/_hooks/useMinimizeMenu";
+import logoSmall from "@/public/logo-small.svg";
 
 const navLinks = [
   { navIcon: OverviewIcon, navText: "overview", route: "/" },
@@ -34,7 +34,7 @@ export default function DashboardNavbar() {
 
   return (
     <nav
-      className={`dashboard-nav  ${isMinimizeMenu ? "lg:max-w-[88px]" : "lg:max-w-[300px]"} transition-all duration-300 overflow-hidden`}
+      className={`dashboard-nav ${isMinimizeMenu ? "lg:max-w-[88px]" : "lg:max-w-[300px]"} overflow-hidden transition-all duration-300`}
     >
       {/* logo on desktop */}
       <div className="hidden lg:block lg:px-8 lg:py-10">
@@ -57,19 +57,20 @@ export default function DashboardNavbar() {
             isMinimizeMenu={isMinimizeMenu}
           />
         ))}
+        <SignoutButton isMinimizeMenu={isMinimizeMenu} />
       </div>
 
       {/* mininmize menu */}
-      <div className="lg:px-8 lg:py-4 ">
+      <div className="lg:px-8 lg:py-4">
         <button
           onClick={onMinimiseMenu}
-          className=" items-center gap-4 hidden lg:flex border cursor-pointer group"
+          className="group hidden cursor-pointer items-center gap-4 border lg:flex"
         >
           <div className={`${isMinimizeMenu ? "rotate-180" : "rotate-0"}`}>
             <MinimizeIcon styles="group-hover:fill-grey-100 transition-colors" />
           </div>
           {!isMinimizeMenu && (
-            <span className="text-preset-3 capitalize text-grey-300 group-hover:text-grey-100 transition-colors">
+            <span className="text-preset-3 text-grey-300 group-hover:text-grey-100 capitalize transition-colors">
               minimize menu
             </span>
           )}
