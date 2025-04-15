@@ -61,7 +61,7 @@ export default function AddMoneyForm() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ ease: "easeIn", duration: 0.2 }}
+          transition={{ ease: "easeIn", duration: 0.1 }}
         >
           {/* Form block */}
           <motion.div

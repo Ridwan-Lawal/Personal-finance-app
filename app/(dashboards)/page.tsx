@@ -43,5 +43,4 @@ export default function Page() {
   );
 }
 
-// Add skeletons
 // Add metadata
