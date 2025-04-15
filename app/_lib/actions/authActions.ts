@@ -96,7 +96,7 @@ export async function signupAction(prevState: unknown, formData: FormData) {
 
     // Add Demo balances
 
-    const { data: balanceData, error: balanceError } = await supabase
+    const { error: balanceError } = await supabase
       .from("balance")
       .insert([{ ...balance, userId: data?.user?.id }])
       .select();
@@ -199,6 +199,7 @@ export async function signinAction(prevState: unknown, formData: FormData) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function signOutAction(prevState: unknown) {
   const supabase = await createClient();
 
