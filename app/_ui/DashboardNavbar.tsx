@@ -34,7 +34,7 @@ export default function DashboardNavbar() {
 
   return (
     <nav
-      className={`dashboard-nav ${isMinimizeMenu ? "lg:max-w-[88px]" : "lg:max-w-[300px]"} overflow-hidden transition-all duration-300`}
+      className={`dashboard-nav ${isMinimizeMenu ? "lg:max-w-[88px]" : "lg:max-w-[300px]"} z-50 overflow-hidden transition-all duration-300`}
     >
       {/* logo on desktop */}
       <div className="hidden lg:block lg:px-8 lg:py-10">
