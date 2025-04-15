@@ -4,7 +4,7 @@ export default function TransactionHeader() {
       {["recipient / sender", "category", "transaction date", "amount"].map(
         (text, id, arr) => (
           <p
-            className={`${id === 0 && "col-span-2"} ${id === arr.length - 1 && "justify-self-end"} text-preset-5 text-grey-500 border capitalize`}
+            className={`${id === 0 && "col-span-2"} ${id === arr.length - 1 && "justify-self-end"} text-preset-5 text-grey-500 capitalize`}
             key={text}
           >
             {text}

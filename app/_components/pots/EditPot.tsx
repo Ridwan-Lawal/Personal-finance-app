@@ -32,8 +32,6 @@ export default function EditPotform() {
 
   const potToEdit = pots?.filter((pot) => pot?.id === potToEditId)?.at(0);
 
-  console.log(potToEdit, pots);
-
   const onCloseModal = useCallback(
     () =>
       dispatch(onUpdateEditPotModalOpening({ modalOpen: false, potId: "" })),
@@ -72,7 +70,7 @@ export default function EditPotform() {
             className={`form-block max-w-[560px] space-y-5 rounded-xl bg-white px-5 py-6 shadow-md md:px-8 md:py-8`}
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-preset-1-2 text-grey-900 border capitalize">
+              <h2 className="text-preset-1-2 text-grey-900 capitalize">
                 edit pot
               </h2>
 

@@ -25,8 +25,6 @@ export default function BudgetCategory({
   inputDisable?: boolean;
   defaultCategoryToEdit?: string | null;
 }) {
-  console.log(defaultCategoryToEdit, "eddiiiiiiiit");
-
   const { data: budgets } = useSuspenseQuery({
     queryKey: ["budgets"],
     queryFn: () => getBudgets(),
@@ -51,10 +49,7 @@ export default function BudgetCategory({
     <fieldset className="field budget-category relative">
       <label htmlFor="category">Budget Category</label>
 
-      <div
-        className="field-container cursor-pointer border"
-        onClick={onOpenDropdown}
-      >
+      <div className="field-container cursor-pointer" onClick={onOpenDropdown}>
         <input
           type="text"
           name="category"
@@ -76,7 +71,7 @@ export default function BudgetCategory({
         />
       </div>
       {isDropdownOpen && (
-        <ul className="scrollbar-thin scrollbar-track-white scrollbar-thumb-gray-300 absolute top-20 z-40 h-[250px] w-full space-y-3 overflow-auto rounded-lg border bg-white px-5 py-3 shadow-md shadow-gray-200">
+        <ul className="scrollbar-thin scrollbar-track-white scrollbar-thumb-gray-300 absolute top-20 z-40 h-[250px] w-full space-y-3 overflow-auto rounded-lg bg-white px-5 py-3 shadow-md shadow-gray-200">
           {CATEGORIES?.map((category) => (
             <li key={category}>
               <button

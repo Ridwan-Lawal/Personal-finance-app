@@ -2,6 +2,7 @@
 import { useShowPassword } from "@/app/_hooks/useShowPassword";
 import { signinAction } from "@/app/_lib/actions/authActions";
 import BasicFormField from "@/app/_ui/BasicFormField";
+import hideIcon from "@/public/icon-hide-password.svg";
 import showIcon from "@/public/icon-show-password.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -78,7 +79,7 @@ export default function SigninForm() {
 
           <div onClick={onShowPassword} className="cursor-pointer">
             <Image
-              src={showIcon}
+              src={showPassword ? hideIcon : showIcon}
               alt="show password"
               quality={100}
               priority={true}

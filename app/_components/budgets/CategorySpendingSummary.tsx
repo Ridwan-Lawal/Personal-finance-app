@@ -12,13 +12,13 @@ export default function CategorySpendingSummary({
   spendingSummary,
 }: SpendingSummaryProps) {
   return (
-    <div className="w-full space-y-6 border md:w-[50%] lg:w-full">
+    <div className="w-full space-y-6 md:w-[50%] lg:w-full">
       <h2 className="text-preset-2 text-grey-900 capitalize">
         spending summary
       </h2>
 
       <div className="space-y-4">
-        {spendingSummary.map((budget, budgetIndex) => (
+        {spendingSummary.map((budget, budgetIndex, arr) => (
           <div key={budget?.id} className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -38,7 +38,7 @@ export default function CategorySpendingSummary({
               </div>
             </div>
 
-            {budgetIndex !== budgetIndex - 1 && (
+            {budgetIndex !== arr.length - 1 && (
               <div className="border-grey-100 border-b" />
             )}
           </div>

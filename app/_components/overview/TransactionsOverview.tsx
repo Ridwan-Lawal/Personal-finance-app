@@ -7,7 +7,7 @@ export default async function TransactionsOverview() {
   const transactions = await overviewTransactions();
 
   return (
-    <div className="transactions-overview h-fit space-y-8 rounded-xl border bg-white px-5 py-6 drop-shadow-sm md:px-8 lg:order-3 lg:col-span-3">
+    <div className="transactions-overview h-fit space-y-8 rounded-xl bg-white px-5 py-6 drop-shadow-sm md:px-8 lg:order-3 lg:col-span-3">
       <header className="flex items-center justify-between">
         <h2 className="text-preset-2 text-grey-900 capitalize">transactions</h2>
 

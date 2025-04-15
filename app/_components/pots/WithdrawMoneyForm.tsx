@@ -85,7 +85,7 @@ export default function WithdrawMoneyForm() {
             className={`form-block max-w-[560px] space-y-5 rounded-xl bg-white px-5 py-6 shadow-md md:px-8 md:py-8`}
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-preset-1-2 text-grey-900 border capitalize">
+              <h2 className="text-preset-1-2 text-grey-900 capitalize">
                 withdraw <span className="lowercase">from </span>{" "}
                 &lsquo;savings&rsquo;
               </h2>

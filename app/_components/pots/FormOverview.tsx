@@ -28,8 +28,6 @@ export default function FormOverview({
     queryFn: () => getPots(),
   });
 
-  console.log(amountToWithdraw, "jfaljfaljlajfkaj");
-
   const potToAddorWithdrawMoneyData = pots
     ?.filter((pot) => pot?.id === potToAddorWithdrawMoney?.potId)
     ?.at(0);
@@ -51,7 +49,6 @@ export default function FormOverview({
     (potToAddorWithdrawMoneyData?.potCurrentBalance ?? 0) +
     (amountToaddOrWidthraw ?? 0);
 
-  console.log(percentageOfTotalSavedToTarget, totalSaved);
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">

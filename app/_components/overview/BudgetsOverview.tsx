@@ -44,8 +44,8 @@ export default async function BudgetsOverview() {
   }));
 
   return (
-    <div className="budgets-overview w-full items-center rounded-[12px] border bg-white px-5 py-6 drop-shadow-sm md:flex-row md:justify-center md:space-y-5 md:px-8 md:py-8 lg:order-2 lg:space-y-0">
-      <header className="flex w-full items-center justify-between border">
+    <div className="budgets-overview w-full items-center rounded-[12px] bg-white px-5 py-6 drop-shadow-sm md:flex-row md:justify-center md:space-y-5 md:px-8 md:py-8 lg:order-2 lg:space-y-0">
+      <header className="flex w-full items-center justify-between">
         <h2 className="text-preset-2 text-grey-900 capitalize">budgets</h2>
 
         <Link href={"/budgets"}>

@@ -101,8 +101,6 @@ export async function signupAction(prevState: unknown, formData: FormData) {
       .insert([{ ...balance, userId: data?.user?.id }])
       .select();
 
-    console.log(balanceData, balanceError, "eyyyyyyy");
-
     if (balanceError) {
       return {
         success: false,
@@ -181,7 +179,6 @@ export async function signinAction(prevState: unknown, formData: FormData) {
       password: userValidatedData?.password,
     });
 
-    console.log(data?.user?.user_metadata);
     if (error) {
       throw new Error(error.message);
     }
@@ -200,4 +197,22 @@ export async function signinAction(prevState: unknown, formData: FormData) {
       };
     }
   }
+}
+
+export async function signOutAction(prevState: unknown) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return {
+      success: false,
+      message: `You are unable to sign out - ${error?.message}`,
+    };
+  }
+
+  return {
+    success: true,
+    message: "Bye! See you later, bro!",
+  };
 }

@@ -65,21 +65,17 @@ export function ChartsSummary({
   }, [totalSpentForAllBudgets, totalMaxSpeding]);
 
   return (
-    <Card className="border-red flex h-fit flex-col">
+    <Card className="flex h-fit flex-col">
       <CardHeader className="hidden items-center pb-0">
         <CardTitle>Pie Chart - Donut with Dynamic Text</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent className="-my-8 min-h-fit flex-1 border pb-0">
+      <CardContent className="-my-8 min-h-fit flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="border-green mx-auto aspect-square h-[293px] max-h-fit w-[293px] border"
+          className="border-green mx-auto aspect-square h-[293px] max-h-fit w-[293px]"
         >
-          <PieChart
-            className="border border-amber-600"
-            width={293}
-            height={293}
-          >
+          <PieChart className="border-amber-600" width={293} height={293}>
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel className="bg-white" />}

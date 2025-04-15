@@ -5,7 +5,6 @@ import { Query } from "@/app/_lib/types";
 export default async function TransactionFooter({ query }: Query) {
   const { totalTransactions } = await getTransactions(query);
 
-  console.log(totalTransactions);
 
   return <TransactionsPagination totalTransactionsFromDB={totalTransactions} />;
 }

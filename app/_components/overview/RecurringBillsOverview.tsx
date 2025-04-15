@@ -29,7 +29,7 @@ export default async function RecurringBillsOverview() {
 
   return (
     <div className="recurring-bills-overview space-y-8 rounded-xl bg-white px-5 py-6 md:px-8 md:py-8 lg:order-5">
-      <header className="flex w-full items-center justify-between border">
+      <header className="flex w-full items-center justify-between">
         <h2 className="text-preset-2 text-grey-900 capitalize">
           recurring bills
         </h2>

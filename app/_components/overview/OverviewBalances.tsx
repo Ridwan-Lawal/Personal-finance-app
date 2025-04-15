@@ -5,8 +5,6 @@ export default async function OverviewBalances() {
 
   const { current, expenses, income } = balances?.at(0) ?? {};
 
-  console.log(balances, "balances");
-
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
       {[

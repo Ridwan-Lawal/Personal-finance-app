@@ -34,7 +34,7 @@ export default async function Overview() {
   );
 
   return (
-    <div className="flex-l flex flex-col gap-3 border md:w-full md:flex-6 md:flex-row lg:w-[36%] lg:flex-col">
+    <div className="flex-l flex flex-col gap-3 md:w-full md:flex-6 md:flex-row lg:w-[36%] lg:flex-col">
       {/* total bills */}
       <div className="total-bills md:w-[50%] lg:w-full">
         <Image src={bilIcon} alt="bill-icon" quality={100} priority={true} />

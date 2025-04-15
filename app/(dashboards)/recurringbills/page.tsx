@@ -4,6 +4,10 @@ import Overview from "@/app/_components/recurringbills/Overview";
 import SearchForm from "@/app/_components/recurringbills/SearchForm";
 import Sortbar from "@/app/_components/recurringbills/Sortbar";
 import { Metadata } from "@/app/_lib/metadata";
+import {
+  RecurringSummarySkeleton,
+  RecurringTransactionListSkeleton,
+} from "@/app/_skeletons/RecurringSkeleton";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -25,7 +29,7 @@ export default async function Page({
         recurring bills
       </h1>
       <div className="flex flex-col gap-6 lg:flex-row">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<RecurringSummarySkeleton />}>
           <Overview />
         </Suspense>
 
@@ -39,7 +43,10 @@ export default async function Page({
 
           <Heading />
 
-          <Suspense fallback={<div>Loading...</div>} key={suspenseKey}>
+          <Suspense
+            fallback={<RecurringTransactionListSkeleton />}
+            key={suspenseKey}
+          >
             <Bills params={params} />
           </Suspense>
         </div>

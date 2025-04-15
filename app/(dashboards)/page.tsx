@@ -3,6 +3,13 @@ import OverviewBalances from "@/app/_components/overview/OverviewBalances";
 import PotsOverview from "@/app/_components/overview/PotsOverview";
 import RecurringBillsOverview from "@/app/_components/overview/RecurringBillsOverview";
 import TransactionsOverview from "@/app/_components/overview/TransactionsOverview";
+import {
+  BalanceCardsSkeleton,
+  BudgetsOverviewSkeleton,
+  PotsOverviewSkeleton,
+  RecurringBillsOverviewSkeleton,
+  TransactionsOverviewSkeleton,
+} from "@/app/_skeletons/OverviewSkeletons";
 import { Suspense } from "react";
 
 export default function Page() {
@@ -10,24 +17,24 @@ export default function Page() {
     <div className="space-y-8 px-4 py-6 md:px-10 md:py-8">
       <h1 className="text-preset-1 text-grey-900 capitalize">overview</h1>
       <div className="space-y-8">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<BalanceCardsSkeleton />}>
           <OverviewBalances />
         </Suspense>
 
         <div className="overviews space-y-8 lg:space-y-0">
-          <Suspense fallback={<div>Loading... </div>}>
+          <Suspense fallback={<PotsOverviewSkeleton />}>
             <PotsOverview />
           </Suspense>
 
-          <Suspense fallback={<div>Loading... </div>}>
+          <Suspense fallback={<TransactionsOverviewSkeleton />}>
             <TransactionsOverview />
           </Suspense>
 
-          <Suspense fallback={<div>Loding...</div>}>
+          <Suspense fallback={<BudgetsOverviewSkeleton />}>
             <BudgetsOverview />
           </Suspense>
 
-          <Suspense fallback={<div>Loading... </div>}>
+          <Suspense fallback={<RecurringBillsOverviewSkeleton />}>
             <RecurringBillsOverview />
           </Suspense>
         </div>
@@ -36,7 +43,5 @@ export default function Page() {
   );
 }
 
-// sign out
 // Add skeletons
-// Add sign out
 // Add metadata

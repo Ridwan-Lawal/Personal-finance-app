@@ -56,7 +56,7 @@ export default function Menu({
       <AnimatePresence>
         {isMenuOpen && (
           <motion.ul
-            className="absolute top-12 right-5 z-30 w-fit rounded-lg border bg-white px-5 py-3 shadow-md shadow-gray-200"
+            className="absolute top-12 right-5 z-30 w-fit rounded-lg bg-white px-5 py-3 shadow-md shadow-gray-200"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
