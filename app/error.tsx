@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 interface errorProps {
   error: Error;
   reset: () => void;
@@ -9,9 +7,9 @@ interface errorProps {
 
 export default function Error({ error, reset }: errorProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-3">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-3 border">
       <h2 className="text-2xl font-bold">{error.message}</h2>
-      <button className="" onClick={reset}>
+      <button className="btn-primary px-8 py-3" onClick={reset}>
         Reset
       </button>
     </div>

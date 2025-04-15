@@ -13,6 +13,7 @@ import {
 import { Suspense } from "react";
 
 export default function Page() {
+  throw new Error("Something went wrong");
   return (
     <div className="space-y-8 px-4 py-6 md:px-10 md:py-8">
       <h1 className="text-preset-1 text-grey-900 capitalize">overview</h1>
