@@ -64,7 +64,7 @@ export default function DashboardNavbar() {
       <div className="lg:px-8 lg:py-4">
         <button
           onClick={onMinimiseMenu}
-          className="group hidden cursor-pointer items-center gap-4 border lg:flex"
+          className="group hidden cursor-pointer items-center gap-4 lg:flex"
         >
           <div className={`${isMinimizeMenu ? "rotate-180" : "rotate-0"}`}>
             <MinimizeIcon styles="group-hover:fill-grey-100 transition-colors" />

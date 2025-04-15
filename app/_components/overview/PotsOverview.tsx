@@ -15,7 +15,7 @@ export default async function PotsOverview() {
   );
 
   return (
-    <div className="pots-overview space-y-5 rounded-xl border bg-white px-5 py-6 drop-shadow-sm md:px-8">
+    <div className="pots-overview space-y-5 rounded-xl bg-white px-5 py-6 drop-shadow-sm md:px-8">
       {/* header */}
       <header className="flex items-center justify-between">
         <h2 className="text-preset-2 text-grey-900 capitalize">pots</h2>

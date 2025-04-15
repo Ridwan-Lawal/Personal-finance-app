@@ -2,6 +2,7 @@ import Header from "@/app/_components/pots/Header";
 import PotForms from "@/app/_components/pots/PotForms";
 import Pots from "@/app/_components/pots/Pots";
 import { Metadata } from "@/app/_lib/metadata";
+import { PotLoadingSkeleton } from "@/app/_skeletons/PotSkeleton";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function Page() {
     <div className="space-y-8 px-4 py-5 md:px-8 md:py-10">
       <Header />
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<PotLoadingSkeleton />}>
         <Pots />
       </Suspense>
 
@@ -21,3 +22,5 @@ export default function Page() {
     </div>
   );
 }
+
+// continue with the pots suspense

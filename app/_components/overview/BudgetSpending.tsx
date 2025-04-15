@@ -12,10 +12,10 @@ export default function BudgetSpendings({
   spendingSummary,
 }: SpendingSummaryProps) {
   return (
-    <div className="w-full space-y-6 border md:w-[100%] lg:w-full">
+    <div className="w-full space-y-6 md:w-[100%] lg:w-full">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1">
         {spendingSummary.slice(0, 4).map((budget) => (
-          <div key={budget?.id} className="border">
+          <div key={budget?.id} className="">
             <div className="flex gap-4">
               <div className={`w-1 ${budget?.colorTag} `} />
 

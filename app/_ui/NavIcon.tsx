@@ -28,7 +28,7 @@ export default function NavIcon({
   return (
     <div
       onClick={() => router.push(href)}
-      className={`nav-link flex max-w-[104px] flex-col items-center gap-1 pt-2 pb-3 ${isLinkActive && "border-b-green lg:border-l-green bg-beige-100 rounded-t-lg border-b-4 lg:rounded-t-none lg:rounded-r-lg lg:border-b-0 lg:border-l-4"} group w-full cursor-pointer overflow-hidden border py-4 lg:max-w-full lg:flex-row lg:items-center lg:gap-4 lg:px-8 lg:pt-4`}
+      className={`nav-link flex max-w-[104px] flex-col items-center gap-1 pt-2 pb-3 ${isLinkActive && "border-b-green lg:border-l-green bg-beige-100 rounded-t-lg border-b-4 lg:rounded-t-none lg:rounded-r-lg lg:border-b-0 lg:border-l-4"} group w-full cursor-pointer overflow-hidden py-4 lg:max-w-full lg:flex-row lg:items-center lg:gap-4 lg:px-8 lg:pt-4`}
     >
       <div className="icon">
         <Icon
@@ -38,7 +38,7 @@ export default function NavIcon({
       </div>
 
       <p
-        className={`text-preset-5-bold hidden capitalize transition-colors sm:block lg:text-base ${isLinkActive ? "text-grey-900 group-hover:text-green" : "text-grey-300 group-hover:text-grey-100"} ${isMinimizeMenu ? "lg:w-0" : "lg:w-full"}transition-all border duration-1000`}
+        className={`text-preset-5-bold hidden capitalize transition-colors sm:block lg:text-base ${isLinkActive ? "text-grey-900 group-hover:text-green" : "text-grey-300 group-hover:text-grey-100"} ${isMinimizeMenu ? "lg:w-0" : "lg:w-full"}transition-all duration-1000`}
       >
         {text}
       </p>

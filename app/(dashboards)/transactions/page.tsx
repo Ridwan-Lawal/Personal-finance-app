@@ -4,6 +4,10 @@ import TransactionHeader from "@/app/_components/transactions/TransactionHeader"
 import Transactions from "@/app/_components/transactions/Transactions";
 import TransactionSearch from "@/app/_components/transactions/TransactionSearch";
 import { Metadata } from "@/app/_lib/metadata";
+import {
+  PaginationSkeleton,
+  TransactionListSkeleton,
+} from "@/app/_skeletons/TransactionsSkeletons";
 
 import { Suspense } from "react";
 
@@ -22,11 +26,9 @@ interface SearchParams {
 
 export default async function Page({ searchParams }: SearchParams) {
   const query = await searchParams;
-  console.log(query);
 
   const suspenseKey = `${query?.sortby}-${query?.category}-${query?.search}-${query?.page}`;
 
-  console.log(suspenseKey);
   return (
     <div className="space-y-8 px-4 py-6 md:px-10 md:py-8">
       <h1 className="text-preset-1 text-grey-900">Transactions</h1>
@@ -38,10 +40,10 @@ export default async function Page({ searchParams }: SearchParams) {
           <TransactionFilterSort />
         </div>
         <TransactionHeader />
-        <Suspense fallback={<div>Loading...</div>} key={suspenseKey}>
+        <Suspense fallback={<TransactionListSkeleton />} key={suspenseKey}>
           <Transactions query={query} />
         </Suspense>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<PaginationSkeleton />}>
           <TransactionFooter query={query} />
         </Suspense>
       </div>

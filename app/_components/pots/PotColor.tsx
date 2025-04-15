@@ -33,8 +33,6 @@ export default function PotColor({
     colorToEdit ||
     COLORS.filter((color) => !colorTagsUsed?.includes(color?.color))?.at(0);
 
-  console.log(defaultColor, colorToEdit, "okaaay");
-
   const [budgetColor, setBudgetColor] = useState(defaultColor);
   const { isDropdownOpen, onOpenDropdown } = useDropdown(".color-tag");
 
@@ -71,8 +69,8 @@ export default function PotColor({
         />
       </div>
       {isDropdownOpen && (
-        <div className="border-red absolute top-20 z-30 w-full overflow-hidden rounded-lg border bg-white">
-          <ul className="scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-300 scrollbar-track-white scroll h-[150px] w-full space-y-3 overflow-auto rounded-lg border bg-white px-5 py-3 shadow-md lg:md:h-[130px]">
+        <div className="border-red absolute top-20 z-30 w-full overflow-hidden rounded-lg bg-white">
+          <ul className="scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-300 scrollbar-track-white scroll h-[150px] w-full space-y-3 overflow-auto rounded-lg bg-white px-5 py-3 shadow-md lg:md:h-[130px]">
             {COLORS?.map((color) => (
               <li key={color?.color}>
                 <button

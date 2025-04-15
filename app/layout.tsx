@@ -23,9 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StoreProvider>
-        <body
-          className={`${publicSans?.className} flex border-2 border-red-900 antialiased`}
-        >
+        <body className={`${publicSans?.className} flex antialiased`}>
           <Providers>
             {children}
 

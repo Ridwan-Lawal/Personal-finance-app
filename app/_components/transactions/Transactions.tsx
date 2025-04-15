@@ -5,8 +5,6 @@ import { Query } from "@/app/_lib/types";
 export default async function Transactions({ query }: Query) {
   const { transactions } = await getTransactions(query);
 
-  console.log(transactions);
-
   if (!transactions?.length) {
     return (
       <h2 className="text-preset-3 text-grey-900 text-center italic">

@@ -23,8 +23,6 @@ export default function PotDeleteModal() {
     useSelector(getPotsSliceReducer);
   const dispatch = useDispatch();
 
-  console.log(isDeletePotModalOpen, "delete moddalll");
-
   // Effect to remove modal when mouse click outside the modal
 
   const onCloseModal = useCallback(

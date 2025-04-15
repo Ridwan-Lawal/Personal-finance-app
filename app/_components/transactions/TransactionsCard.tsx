@@ -9,7 +9,7 @@ export default async function TransactionsCard({
 }) {
   const { avatar, name, category, created_at, amount } = transaction ?? {};
 
-  //   const blurDataUrl = await getBase64Image(avatar);
+  const formattedAvatar = `/${avatar?.split("/").slice(3).join("/")}`;
 
   return (
     <div className="border-grey-100 flex items-center justify-between gap-8 border-t pt-4 md:grid md:grid-cols-5">
@@ -18,7 +18,7 @@ export default async function TransactionsCard({
         {/* avatar */}
         <div className="relative size-8 overflow-hidden rounded-full md:size-10">
           <Image
-            src="/avatars/emma-richardson.jpg"
+            src={formattedAvatar}
             alt="avatar"
             quality={100}
             priority={true}

@@ -53,7 +53,7 @@ export default function SortSelectBar<T extends StaticImageData>({
   }, [onBlurDropdown]);
 
   return (
-    <div className="dropdown-block flex w-fit flex-col gap-2 border">
+    <div className="dropdown-block flex w-fit flex-col gap-2">
       {/* icon  */}
       <Image
         src={icon}

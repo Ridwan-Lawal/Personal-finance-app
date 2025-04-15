@@ -26,7 +26,7 @@ export default async function BudgetOverview({ budget }: { budget: budgets }) {
     );
 
   return (
-    <div className="space-y-4 border">
+    <div className="space-y-4">
       <p className="text-preset-4 text-grey-500">
         Maximum of ${budget?.maxSpending?.toFixed(2)}
       </p>
@@ -43,9 +43,7 @@ export default async function BudgetOverview({ budget }: { budget: budgets }) {
       <div className="flex items-center gap-4">
         {/* spent */}
         <div className="flex w-1/2 gap-4">
-          <div
-            className={`${getColorStyles(budget?.colorTag)} w-[5px] border`}
-          />
+          <div className={`${getColorStyles(budget?.colorTag)} w-[5px]`} />
           <div className="flex flex-col gap-1">
             <p className="text-preset-5 text-grey-500">Spent</p>
 

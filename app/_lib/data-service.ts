@@ -1,5 +1,6 @@
 import { TRANSACTION_PER_PAGE } from "@/app/_lib/constant";
 import { createClient } from "@/app/_lib/supabase/server";
+import { redirect } from "next/navigation";
 import { getPlaiceholder } from "plaiceholder";
 import { cache } from "react";
 
@@ -12,14 +13,13 @@ interface QueryData {
 
 export const getTransactions = cache(
   async ({ page, category, sortby, search }: QueryData) => {
-    console.log(page, "paaaaaaaaaaaaaaaaaage");
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      throw new Error("You need to be signed in to fetch this data!");
+      redirect("/user/signin");
     }
 
     // Getting transactions
@@ -79,8 +79,6 @@ export const getTransactions = cache(
         to = +page * TRANSACTION_PER_PAGE - 1;
       }
 
-      console.log(from, to, page);
-
       query = query.range(from, to);
     }
 
@@ -89,7 +87,7 @@ export const getTransactions = cache(
     if (error) {
       throw new Error(error.message);
     }
-    console.log("fetching", page, category);
+
     return { transactions, totalTransactions };
   },
 );
@@ -121,10 +119,8 @@ export const getBudgets = cache(async function () {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    throw new Error("You need to be signed in to get this data!");
+    redirect("/user/signin");
   }
-
-  // Getting data
 
   const { data: budgets, error } = await supabase
     .from("budgets")
@@ -148,7 +144,7 @@ export const getTransactionByCategory = cache(async function (
   } = await supabase.auth.getUser();
 
   if (!user) {
-    throw new Error("You need to be signed to get this data!");
+    redirect("/user/signin");
   }
 
   // getting the data
@@ -177,7 +173,7 @@ export const getPots = cache(async function () {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    throw new Error("You need to be signed to fetch the pots data!");
+    redirect("/user/signin");
   }
 
   const { data: pots, error } = await supabase
@@ -200,7 +196,7 @@ export const getRecurringTransactions = cache(async function (params?: {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    throw new Error("You need to be signed in to call this data!");
+    redirect("/user/signin");
   }
 
   let query = supabase
@@ -273,7 +269,7 @@ export const overviewTransactions = cache(async function () {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    throw new Error("You need to be signed in to fetch the transactions!");
+    redirect("/user/signin");
   }
 
   const { data: transactions, error } = await supabase
@@ -297,7 +293,7 @@ export async function getBalances() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    throw new Error("You need to be signed in to fetch this data!");
+    redirect("/user/signin");
   }
 
   // Getting balances.
@@ -309,8 +305,6 @@ export async function getBalances() {
   if (error?.message) {
     throw new Error(`Balances could not be fetched! - ${error?.message}`);
   }
-
-  console.log(balances, "yesssbalance", user?.id);
 
   return balances;
 }

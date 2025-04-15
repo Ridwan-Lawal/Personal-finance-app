@@ -19,8 +19,6 @@ export default function DeleteModal() {
     null,
   );
 
-  console.log(state, "successs");
-
   const { isDeleteModalOpen, budgetToDelete } = useSelector(
     getBudgetSliceReducer,
   );

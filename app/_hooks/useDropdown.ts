@@ -9,7 +9,6 @@ export function useDropdown(className: string) {
     function onClickOutsideForm(e: Event | MouseEvent) {
       const target = e.target as HTMLElement;
       if (!target.closest(className)) {
-        console.log(className);
         setIsDropdownOpen(false);
       }
     }

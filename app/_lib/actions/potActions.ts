@@ -192,8 +192,6 @@ export async function deletePotAction(prevState: unknown, formData: FormData) {
   const potToDeleteId = formData.get("potId");
   const potToDeleteName = formData.get("potName");
 
-  console.log(potToDeleteId, potToDeleteName);
-
   const { data: userPots, error } = await supabase
     .from("pots")
     .select("*")

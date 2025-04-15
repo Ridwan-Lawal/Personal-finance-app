@@ -140,13 +140,13 @@ body {
     @apply bg-grey-900 gap-6 rounded-t-[8px] border border-black lg:flex lg:h-full lg:w-full lg:flex-col lg:rounded-t-none lg:rounded-r-[10px] lg:pb-6;
   }
   .nav-links {
-    @apply flex flex-row items-center justify-between border px-4 pt-2 md:px-10 lg:flex-grow lg:flex-col lg:items-start lg:justify-start lg:gap-1 lg:px-0 lg:pr-6;
+    @apply flex flex-row items-center justify-between px-4 pt-2 md:px-10 lg:flex-grow lg:flex-col lg:items-start lg:justify-start lg:gap-1 lg:px-0 lg:pr-6;
   }
 
   /* Transaction page */
   /* select bar */
   .select-bar {
-    @apply hidden items-center gap-2 border md:flex;
+    @apply hidden items-center gap-2 md:flex;
   }
 
   .select-bar div {
@@ -154,7 +154,7 @@ body {
   }
 
   .dropdown {
-    @apply absolute w-full space-y-3 rounded-lg border bg-white px-5 py-3 shadow-md;
+    @apply absolute w-full space-y-3 rounded-lg bg-white px-5 py-3 drop-shadow-md;
   }
 
   /* recurring bills */
@@ -190,4 +190,19 @@ body {
       grid-area: transactions-overview;
     }
   }
+}
+
+@keyframes shrinkAndExpand {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.spinner-container {
+  animation: shrinkAndExpand 1.5s infinite ease-in-out;
 }
